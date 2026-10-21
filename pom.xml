@@ -26,6 +26,7 @@
 		<tag/>
 		<url/>
 	</scm>
+	<packaging>pom</packaging>
 	<modules>
 		<module>TaskService</module>
 	</modules>

@@ -18,6 +18,7 @@ public class TaskDomain {
     private TaskStatus taskStatus;
     private final TaskPriority taskPriority;
     private String title;
+    private String normalizedTitle;
     private String description;
 
     private LocalDate deadline;
@@ -41,17 +42,18 @@ public class TaskDomain {
         this.taskStatus = taskStatus;
         this.taskPriority = taskPriority;
         this.title = title;
+        this.normalizedTitle = title.toLowerCase().trim();
         this.description = description;
         this.deadline = deadline;
         this.createdAt = createdAt;
         this.lastActivityAt = lastActivityAt;
     }
 
-    public static TaskDomain createTask(TaskType taskType, TaskStatus taskStatus, TaskPriority taskPriority, String title, String description, LocalDate deadline) {
+    public static TaskDomain createTask(TaskType taskType, TaskPriority taskPriority, String title, String description, LocalDate deadline) {
         TaskId taskId = TaskId.generateTaskId();
         LocalDateTime now = LocalDateTime.now();
 
-        return new TaskDomain(taskId, taskType, taskStatus, taskPriority, title, description, deadline, now, now);
+        return new TaskDomain(taskId, taskType, TaskStatus.TODO, taskPriority, title, description, deadline, now, now);
     }
 
     public static TaskDomain restoreFromExisting(UUID rawId, TaskType taskType, TaskStatus taskStatus, TaskPriority taskPriority, String title, String description, LocalDate deadline, LocalDateTime createdAt, LocalDateTime lastActivityAt) {
@@ -94,6 +96,7 @@ public class TaskDomain {
         if (newTitle == null || newTitle.isBlank()) throw new IllegalArgumentException("New title is required");
         if (this.title.equals(newTitle)) throw new IllegalArgumentException("You cant set the same title");
         this.title = newTitle;
+        this.normalizedTitle = newTitle.toLowerCase().trim();
         this.lastActivityAt = LocalDateTime.now();
     }
 

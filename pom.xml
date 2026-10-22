@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>4.1.1</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.VladosSUPER</groupId>
 	<artifactId>Core</artifactId>
@@ -26,6 +26,10 @@
 		<tag/>
 		<url/>
 	</scm>
+	<packaging>pom</packaging>
+	<modules>
+		<module>TaskService</module>
+	</modules>
 	<properties>
 		<java.version>21</java.version>
 	</properties>

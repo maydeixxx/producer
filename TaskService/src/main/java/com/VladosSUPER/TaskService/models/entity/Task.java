@@ -17,7 +17,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "tasks")
+@Table(name = "tasks", indexes = {
+        @Index(name = "idx_normalized_title", columnList = "normalizedTitle")
+})
 public class Task {
     @Id
     private UUID id;

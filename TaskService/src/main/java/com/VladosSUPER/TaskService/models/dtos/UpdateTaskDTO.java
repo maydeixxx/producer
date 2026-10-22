@@ -1,5 +1,6 @@
 package com.VladosSUPER.TaskService.models.dtos;
 
+import com.VladosSUPER.TaskService.models.enums.TaskPriority;
 import com.VladosSUPER.TaskService.models.enums.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ public record UpdateTaskDTO(
         @NotBlank(message = "Type of update is required")
         String type,
         TaskStatus newStatus,
+        TaskPriority newPriority,
         String newTitle,
         String newDescription,
         LocalDate newDeadline

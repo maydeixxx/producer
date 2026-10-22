@@ -11,6 +11,7 @@ public class TaskMapper {
         Task task = new Task();
         task.setId(domain.getId().id());
         task.setTitle(domain.getTitle());
+        task.setNormalizedTitle(domain.getNormalizedTitle());
         task.setDescription(domain.getDescription());
         task.setTaskType(domain.getTaskType());
         task.setTaskStatus(domain.getTaskStatus());

@@ -45,9 +45,12 @@ public class TaskService {
         taskRepository.save(taskMapper.domainToEntity(newTask));
     }
 
-    public TaskDTO getTaskByTitle(String title) {
-        Task task = taskRepository.findByTitle(title.toLowerCase().trim()).orElseThrow(() -> new TaskNotFoundException("Task %s not found".formatted(title)));
-        return taskMapper.entityToDto(task);
+    public List<TaskDTO> getTaskByTitle(String query) {
+        if (query == null || query.isBlank()) throw new IllegalArgumentException("Query is required to find task(s)");
+
+        return taskRepository.findByNormalizedTitleContaining(query.toLowerCase().trim()).stream()
+                .map(taskMapper::entityToDto)
+                .toList();
     }
 
     public List<TaskDTO> getAllTasks() {
@@ -57,6 +60,8 @@ public class TaskService {
     }
 
     public TaskDTO getTaskById(UUID id) {
+        if (id == null) throw new IllegalArgumentException("Id is required to find the task");
+
         Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task %s not found".formatted(id)));
         return taskMapper.entityToDto(task);
     }
@@ -73,6 +78,8 @@ public class TaskService {
     }
 
     public void deleteTaskById(UUID id) {
+        if (id == null) throw new IllegalArgumentException("Id is required to delete the task");
+
         taskRepository.deleteById(id);
     }
 }

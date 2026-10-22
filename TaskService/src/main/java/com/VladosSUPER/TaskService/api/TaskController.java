@@ -48,9 +48,9 @@ public class TaskController {
         return ResponseEntity.ok(allTasks);
     }
 
-    @GetMapping("/title/{title}")
-    public ResponseEntity<TaskDTO> getTaskByTitle(@PathVariable String title) {
-        TaskDTO task = taskService.getTaskByTitle(title);
+    @GetMapping("/title")
+    public ResponseEntity<List<TaskDTO>> getTaskByTitle(@RequestParam("title") String title) {
+        List<TaskDTO> task = taskService.getTaskByTitle(title);
         return ResponseEntity.ok(task);
     }
 }

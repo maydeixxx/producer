@@ -16,7 +16,7 @@ public class TaskDomain {
     private final TaskId id;
     private final TaskType taskType;
     private TaskStatus taskStatus;
-    private final TaskPriority taskPriority;
+    private TaskPriority taskPriority;
     private String title;
     private String normalizedTitle;
     private String description;
@@ -76,6 +76,12 @@ public class TaskDomain {
     public void processTask() {
         if (this.taskStatus.equals(TaskStatus.PROCESSING)) throw new IllegalStateException("Task already in processing");
         this.taskStatus = TaskStatus.PROCESSING;
+        this.lastActivityAt = LocalDateTime.now();
+    }
+
+    public void updatePriority(TaskPriority newPriority) {
+        if (newPriority == null) throw new IllegalArgumentException("New priority cant be null");
+        this.taskPriority = newPriority;
         this.lastActivityAt = LocalDateTime.now();
     }
 

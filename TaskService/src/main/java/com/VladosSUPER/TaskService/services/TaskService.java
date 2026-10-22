@@ -10,6 +10,7 @@ import com.VladosSUPER.TaskService.models.exceptions.UpdateStrategyNotFound;
 import com.VladosSUPER.TaskService.services.interfaces.TaskRepository;
 import com.VladosSUPER.TaskService.services.interfaces.TaskUpdateStrategy;
 import com.VladosSUPER.TaskService.services.misc.TaskMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class TaskService {
         }
     }
 
+    @Transactional
     public void createTask(CreateTaskDTO dto) {
         TaskDomain newTask = TaskDomain.createTask(
                 dto.taskType(),
@@ -66,6 +68,7 @@ public class TaskService {
         return taskMapper.entityToDto(task);
     }
 
+    @Transactional
     public void updateTask(UpdateTaskDTO dto) {
         Task task = taskRepository.findById(dto.taskId()).orElseThrow(() -> new TaskNotFoundException("Task %s not found".formatted(dto.taskId())));
         TaskDomain domain = taskMapper.entityToDomain(task);
@@ -77,6 +80,7 @@ public class TaskService {
         taskRepository.save(taskMapper.domainToEntity(domain));
     }
 
+    @Transactional
     public void deleteTaskById(UUID id) {
         if (id == null) throw new IllegalArgumentException("Id is required to delete the task");
 

@@ -1,0 +1,1 @@
+CREATE INDEX idx_normalized_title on tasks(normalized_title);

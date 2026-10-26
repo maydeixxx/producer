@@ -33,6 +33,7 @@ public class OutboxEvent {
     private OutboxStatus status;
 
     @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private TaskPriority taskPriority;
 
     @Column(nullable = false)

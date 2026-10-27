@@ -11,6 +11,19 @@ services:
     volumes:
       - postgres_task_data:/var/lib/postgresql/data
 
+  postgres-expert:
+    image: postgres:15-alpine
+    container_name: postgres-expert
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: experts_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_expert_data:/var/lib/postgresql/data
+
 
 volumes:
   postgres_task_data:
+  postgres_expert_data:

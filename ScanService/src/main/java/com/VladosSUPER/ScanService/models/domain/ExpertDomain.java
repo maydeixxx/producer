@@ -5,6 +5,7 @@ import com.VladosSUPER.ScanService.models.domain.valueObjects.ExpertLink;
 import com.VladosSUPER.ScanService.models.domain.valueObjects.ExpertNickname;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,8 +31,8 @@ public class ExpertDomain {
         this.expertNickname = expertNickname;
         this.coverage = coverage;
         this.targetAud = targetAud;
-        this.needs = needs.stream().map(String::toLowerCase).toList();
-        this.levers = levers.stream().map(String::toLowerCase).toList();
+        this.needs = new ArrayList<>(needs.stream().map(String::toLowerCase).toList());
+        this.levers = new ArrayList<>(levers.stream().map(String::toLowerCase).toList());
     }
 
     public static ExpertDomain createExpert(String rawExpertLink, String rawExpertNickname, long coverage, String targetAud, List<String> needs, List<String> levers) {

@@ -28,6 +28,7 @@
 	</scm>
 	<packaging>pom</packaging>
 	<modules>
+		<module>ScanService</module>
 		<module>NotificationService</module>
 		<module>TaskService</module>
 	</modules>

@@ -80,7 +80,6 @@ public class NotificationService {
             containerFactory = "taskEventModelConcurrentKafkaListenerContainerFactory"
     )
     public void handleHighPriorityTask(ConsumerRecord<UUID, TaskEventModel> record) {
-        //TODO доделать правильную логику отправки сообщения в чат
         if (record.key() == null) throw new IllegalArgumentException("Task id is null");
         if (record.value() == null) throw new IllegalArgumentException("Task model is null");
         UUID id = record.key();

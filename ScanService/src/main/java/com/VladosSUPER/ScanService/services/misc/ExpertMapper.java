@@ -1,6 +1,7 @@
 package com.VladosSUPER.ScanService.services.misc;
 
 import com.VladosSUPER.ScanService.models.domain.ExpertDomain;
+import com.VladosSUPER.ScanService.models.dtos.ExpertDto;
 import com.VladosSUPER.ScanService.models.entity.Expert;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,17 @@ public class ExpertMapper {
                 entity.getTargetAud(),
                 entity.getNeeds(),
                 entity.getLevers()
+        );
+    }
+
+    public ExpertDto entityToDto(Expert expert) {
+        return new ExpertDto(
+                expert.getId(),
+                expert.getExpertLink(),
+                expert.getExpertNickname(),
+                expert.getCoverage(),
+                expert.getNeeds(),
+                expert.getLevers()
         );
     }
 }

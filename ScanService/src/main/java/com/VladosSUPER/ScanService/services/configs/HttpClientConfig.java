@@ -1,4 +1,4 @@
-package com.VladosSUPER.NotificationService.services.configs;
+package com.VladosSUPER.ScanService.services.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

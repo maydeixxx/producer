@@ -200,10 +200,10 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 .map(t => (
                   <div
                     key={t.id}
-                    className="p-3.5 rounded-xl panel-inset hover:border-zinc-500 transition cursor-pointer space-y-2.5 group"
+                    className="p-3.5 rounded-xl panel-inset hover:border-zinc-400 transition cursor-pointer space-y-2.5 group"
                     onClick={() => {
                       playTick();
-                      onUpdateStatus(t.id, 'PROCESSING');
+                      onEditTask(t);
                     }}
                   >
                     <div className="flex items-center justify-between">
@@ -254,13 +254,22 @@ export const TasksPage: React.FC<TasksPageProps> = ({
 
                     <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pt-1.5 border-t border-border-subtle">
                       <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-zinc-500" />
+                        <Clock className="w-3 h-3 text-zinc-400" />
                         <span>До {t.deadline || 'дедлайна'}</span>
                       </span>
-                      <span className="text-zinc-400 group-hover:text-white transition flex items-center gap-0.5">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playTick();
+                          onUpdateStatus(t.id, 'PROCESSING');
+                        }}
+                        className="text-zinc-300 group-hover:text-white hover:text-accent-orange transition flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-surface-200"
+                        title="Перевести в работу"
+                      >
                         <span>В работу</span>
                         <ArrowRight className="w-3 h-3" />
-                      </span>
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -297,10 +306,10 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 .map(t => (
                   <div
                     key={t.id}
-                    className="p-3.5 rounded-xl panel-inset border-l-2 border-l-accent-orange hover:border-zinc-500 transition cursor-pointer space-y-2.5 group"
+                    className="p-3.5 rounded-xl panel-inset border-l-2 border-l-accent-orange hover:border-zinc-400 transition cursor-pointer space-y-2.5 group"
                     onClick={() => {
                       playTick();
-                      onUpdateStatus(t.id, 'DONE');
+                      onEditTask(t);
                     }}
                   >
                     <div className="flex items-center justify-between">
@@ -354,9 +363,19 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                         <Clock className="w-3 h-3 text-accent-orange" />
                         <span className="text-zinc-200">До {t.deadline || 'дедлайна'}</span>
                       </span>
-                      <span className="text-accent-green group-hover:underline flex items-center gap-0.5">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playTick();
+                          onUpdateStatus(t.id, 'DONE');
+                        }}
+                        className="text-accent-green hover:underline transition flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-surface-200 font-semibold"
+                        title="Завершить задачу"
+                      >
                         <span>Готово ✓</span>
-                      </span>
+                        <CheckCircle2 className="w-3 h-3" />
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -390,7 +409,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                     className="p-3.5 rounded-xl panel-inset opacity-80 hover:opacity-100 transition cursor-pointer space-y-2.5 group"
                     onClick={() => {
                       playTick();
-                      onUpdateStatus(t.id, 'TODO');
+                      onEditTask(t);
                     }}
                   >
                     <div className="flex items-center justify-between">
@@ -432,9 +451,20 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-1.5 border-t border-border-subtle">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pt-1.5 border-t border-border-subtle">
                       <span>Выполнено</span>
-                      <span className="text-zinc-400 hover:text-white">Вернуть ↺</span>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          playTick();
+                          onUpdateStatus(t.id, 'TODO');
+                        }}
+                        className="text-zinc-300 hover:text-white transition px-1.5 py-0.5 rounded hover:bg-surface-200"
+                        title="Вернуть в очередь"
+                      >
+                        Вернуть ↺
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -465,18 +495,29 @@ export const TasksPage: React.FC<TasksPageProps> = ({
               className="grid grid-cols-12 px-4 py-3.5 items-center text-xs hover:bg-surface-200/50 cursor-pointer transition group"
               onClick={() => {
                 playTick();
-                onUpdateStatus(t.id, getNextStatus(t.taskStatus));
+                onEditTask(t);
               }}
             >
-              {/* Status */}
+              {/* Status Toggle Button */}
               <div className="col-span-1">
-                {t.taskStatus === 'DONE' ? (
-                  <CheckCircle2 className="w-4 h-4 text-accent-green" />
-                ) : t.taskStatus === 'PROCESSING' ? (
-                  <span className="w-3.5 h-3.5 rounded-full border-2 border-accent-orange border-t-transparent animate-spin inline-block" />
-                ) : (
-                  <span className="w-3.5 h-3.5 rounded-full border border-zinc-500 inline-block" />
-                )}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playTick();
+                    onUpdateStatus(t.id, getNextStatus(t.taskStatus));
+                  }}
+                  className="p-1 rounded hover:bg-surface-200 transition"
+                  title="Сменить статус"
+                >
+                  {t.taskStatus === 'DONE' ? (
+                    <CheckCircle2 className="w-4 h-4 text-accent-green" />
+                  ) : t.taskStatus === 'PROCESSING' ? (
+                    <span className="w-3.5 h-3.5 rounded-full border-2 border-accent-orange border-t-transparent animate-spin inline-block" />
+                  ) : (
+                    <span className="w-3.5 h-3.5 rounded-full border border-zinc-400 inline-block" />
+                  )}
+                </button>
               </div>
 
               {/* Title & Desc */}

@@ -260,19 +260,40 @@ public class ExpertService {
     }
 
     private long calculateCoverage(List<InstagramPost> posts) {
-        List<Long> views = posts.stream()
+        if (posts == null || posts.isEmpty()) {
+            return 0L;
+        }
+
+        // Среднее количество просмотров по видео/рилсам
+        double avgViews = posts.stream()
                 .map(p -> p.videoPlayCount() != null ? p.videoPlayCount() : p.videoViewCount())
                 .filter(Objects::nonNull)
                 .filter(v -> v > 0)
-                .toList();
-        if (!views.isEmpty()) {
-            return (long) views.stream().mapToLong(Long::longValue).average().orElseThrow(() -> new IllegalArgumentException("Error calculating views"));
+                .mapToLong(Long::longValue)
+                .average()
+                .orElse(0.0);
+
+        // Среднее количество лайков с постов
+        double avgLikes = posts.stream()
+                .map(p -> p.likesCount() != null ? (long) p.likesCount() : 0L)
+                .filter(likes -> likes > 0)
+                .mapToLong(Long::longValue)
+                .average()
+                .orElse(0.0);
+
+        // Если есть просмотры видео: суммируем среднее просмотров + среднее лайков
+        if (avgViews > 0.0) {
+            return Math.max(Math.round(avgViews + avgLikes), 1L);
         }
+
+        // Если в выборке только фото/карусели (где нет прямых просмотров),
+        // оцениваем охваты через вовлеченность (ER ~ 10%) плюс лайки
         long avgEngagement = (long) posts.stream()
                 .mapToInt(p -> (p.likesCount() != null ? p.likesCount() : 0) +
                         (p.commentsCount() != null ? p.commentsCount() : 0))
                 .average()
                 .orElse(100.0);
-        return Math.max(avgEngagement * 10, 500L);
+
+        return Math.max(avgEngagement * 10 + Math.round(avgLikes), 500L);
     }
 }

@@ -286,7 +286,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
             }`}
           >
             <AtSign className="w-3.5 h-3.5 text-accent-blue" />
-            <span>Поиск по никнейму (GET /nickname)</span>
+            <span>Поиск по никнейму</span>
           </button>
 
           <button
@@ -303,7 +303,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
             }`}
           >
             <Globe className="w-3.5 h-3.5 text-accent-orange" />
-            <span>Парсинг по ссылке (POST /expert)</span>
+            <span>Парсинг по ссылке</span>
           </button>
         </div>
 

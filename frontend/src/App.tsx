@@ -9,7 +9,7 @@ import { RosterPage } from './components/RosterPage';
 import { CreateTaskModal } from './components/CreateTaskModal';
 import { EditTaskModal } from './components/EditTaskModal';
 import { MemeToast } from './components/MemeToast';
-import { Task, TaskType, MemeReaction, MemeItem, PersonaItem } from './types';
+import { Task, TaskType, MemeReaction, MemeItem, PersonaItem, ExpertData } from './types';
 import { PERSONAS, CURATED_MEMES } from './components/memeData';
 import { 
   triggerBeerToast, 
@@ -38,9 +38,11 @@ export const App: React.FC = () => {
 
   const [backendStatus, setBackendStatus] = useState({ task: false, scan: false });
 
-  // Real Database Tasks
+  // Real Database Tasks & Experts
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoadingTasks, setIsLoadingTasks] = useState<boolean>(true);
+  const [experts, setExperts] = useState<ExpertData[]>([]);
+  const [selectedExpert, setSelectedExpert] = useState<ExpertData | null>(null);
 
   // Fetch real tasks from TaskService (:8081) with backend title search
   const fetchTasks = async (query?: string) => {
@@ -60,6 +62,21 @@ export const App: React.FC = () => {
       // Backend offline
     } finally {
       setIsLoadingTasks(false);
+    }
+  };
+
+  // Fetch real experts from ScanService (:8083)
+  const fetchExperts = async () => {
+    try {
+      const res = await fetch(`${SCAN_API}/all`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setExperts(data);
+        }
+      }
+    } catch {
+      // Backend offline
     }
   };
 
@@ -97,9 +114,11 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     fetchTasks();
+    fetchExperts();
     checkHealth();
     const interval = setInterval(() => {
       checkHealth();
+      fetchExperts();
       if (currentTab !== 'tasks' || !searchQuery.trim()) {
         fetchTasks();
       }
@@ -350,6 +369,16 @@ export const App: React.FC = () => {
           onOpenCreateModal={() => setIsCreateModalOpen(true)}
           onQuickMeme={handleQuickMeme}
           currentTab={currentTab}
+          tasks={tasks}
+          experts={experts}
+          onSelectTask={(t) => {
+            setEditingTask(t);
+            setIsEditTaskModalOpen(true);
+          }}
+          onSelectExpert={(e) => {
+            setSelectedExpert(e);
+            setCurrentTab('scout');
+          }}
         />
 
         {/* Tab Views */}
@@ -398,6 +427,8 @@ export const App: React.FC = () => {
               onShowReaction={(img, title, quote) => setReactionToast({ img, title, quote })}
               externalSearchQuery={currentTab === 'scout' ? searchQuery : ''}
               onClearExternalSearch={() => setSearchQuery('')}
+              selectedExpert={selectedExpert}
+              onSelectExpert={setSelectedExpert}
             />
           )}
 

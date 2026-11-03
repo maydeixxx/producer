@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, Trash2, Edit3, ExternalLink, ArrowRight, AtSign, Globe, AlertCircle } from 'lucide-react';
 import { ExpertData } from '../types';
 import { playTick, triggerDronePing } from './AudioSynthesizer';
@@ -9,6 +9,8 @@ interface InstaScoutPageProps {
   onShowReaction: (img: string, title: string, quote: string) => void;
   externalSearchQuery?: string;
   onClearExternalSearch?: () => void;
+  selectedExpert?: ExpertData | null;
+  onSelectExpert?: (expert: ExpertData | null) => void;
 }
 
 const SCAN_API = "http://localhost:8083/api/v1/expert";
@@ -17,15 +19,19 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
   onTaskCreatedFromScout, 
   onShowReaction,
   externalSearchQuery = "",
-  onClearExternalSearch
+  onClearExternalSearch,
+  selectedExpert: parentSelectedExpert,
+  onSelectExpert: parentOnSelectExpert
 }) => {
   // Top action tab: search by nickname vs parse new profile by URL
   const [actionTab, setActionTab] = useState<'nickname' | 'url'>('nickname');
   
-  // Nickname search state
+  // Nickname search state & dropdown
   const [nicknameInput, setNicknameInput] = useState<string>("");
   const [isSearchingNickname, setIsSearchingNickname] = useState<boolean>(false);
   const [nicknameNotFound, setNicknameNotFound] = useState<string | null>(null);
+  const [isNicknameDropdownOpen, setIsNicknameDropdownOpen] = useState<boolean>(false);
+  const nicknameContainerRef = useRef<HTMLDivElement>(null);
 
   // Parse URL state
   const [url, setUrl] = useState<string>("");
@@ -38,11 +44,28 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
   const [catalogFilter, setCatalogFilter] = useState<string>("");
 
   const [expertsList, setExpertsList] = useState<ExpertData[]>([]);
-  const [selectedExpert, setSelectedExpert] = useState<ExpertData | null>(null);
+  const [internalSelectedExpert, setInternalSelectedExpert] = useState<ExpertData | null>(null);
+
+  const selectedExpert = parentSelectedExpert !== undefined ? parentSelectedExpert : internalSelectedExpert;
+  const setSelectedExpert = (exp: ExpertData | null) => {
+    setInternalSelectedExpert(exp);
+    if (parentOnSelectExpert) parentOnSelectExpert(exp);
+  };
   
   // Edit modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingExpert, setEditingExpert] = useState<ExpertData | null>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (nicknameContainerRef.current && !nicknameContainerRef.current.contains(e.target as Node)) {
+        setIsNicknameDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Fetch all experts from ScanService (:8083)
   const fetchExperts = async () => {
@@ -75,6 +98,13 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
     }
   }, [externalSearchQuery]);
 
+  // When parent selects an expert
+  useEffect(() => {
+    if (parentSelectedExpert) {
+      setSubView('report');
+    }
+  }, [parentSelectedExpert]);
+
   // Search expert by nickname via backend GET /api/v1/expert/nickname?nickname=...
   const handleSearchByNickname = async (queryNickname: string, triggerSound = true) => {
     const clean = queryNickname.trim().replace(/^@/, '');
@@ -83,6 +113,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
 
     setIsSearchingNickname(true);
     setNicknameNotFound(null);
+    setIsNicknameDropdownOpen(false);
 
     try {
       const res = await fetch(`${SCAN_API}/nickname?nickname=${encodeURIComponent(clean.toLowerCase())}`);
@@ -189,6 +220,12 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
     ? expertsList.filter(e => e.nickname.toLowerCase().includes(cleanFilter))
     : expertsList;
 
+  // Matching experts for dropdown
+  const cleanNickQuery = nicknameInput.trim().toLowerCase().replace(/^@/, '');
+  const matchingLocalExperts = cleanNickQuery
+    ? expertsList.filter(e => e.nickname.toLowerCase().includes(cleanNickQuery)).slice(0, 5)
+    : [];
+
   return (
     <div className="space-y-6">
       
@@ -270,29 +307,91 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
           </button>
         </div>
 
-        {/* Option 1: Search by Nickname */}
+        {/* Option 1: Search by Nickname with Dropdown ("Слайдбар" выпадающий список) */}
         {actionTab === 'nickname' && (
           <form 
             onSubmit={(e) => {
               e.preventDefault();
               handleSearchByNickname(nicknameInput);
             }} 
-            className="flex flex-col sm:flex-row gap-2.5"
+            className="flex flex-col sm:flex-row gap-2.5 relative"
           >
-            <div className="relative flex-1">
+            <div className="relative flex-1" ref={nicknameContainerRef}>
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 font-mono text-sm">@</span>
               <input
                 type="text"
                 value={nicknameInput}
+                onFocus={() => setIsNicknameDropdownOpen(true)}
                 onChange={(e) => {
                   setNicknameInput(e.target.value);
+                  setIsNicknameDropdownOpen(true);
                   setNicknameNotFound(null);
                 }}
                 placeholder="Введите никнейм эксперта (например: cakeofsof или @username)..."
                 className="w-full bg-surface-200 border border-border-subtle focus:border-zinc-300 rounded-xl pl-8 pr-4 py-2.5 text-xs text-white placeholder-zinc-400 focus:outline-none transition"
                 required
               />
+
+              {/* Dropdown suggestions under nickname input */}
+              {isNicknameDropdownOpen && nicknameInput.trim().length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 z-40 panel bg-surface-100 rounded-xl shadow-2xl border border-border-subtle p-2 max-h-72 overflow-y-auto space-y-1">
+                  
+                  {matchingLocalExperts.length > 0 && (
+                    <div className="space-y-1">
+                      <div className="text-[10px] font-mono uppercase text-zinc-300 px-2 py-1 font-bold flex items-center justify-between">
+                        <span>Сохраненные эксперты ({matchingLocalExperts.length})</span>
+                        <span className="text-[9px] text-zinc-400 font-normal">клик — открыть досье</span>
+                      </div>
+                      {matchingLocalExperts.map((exp) => (
+                        <div
+                          key={exp.id || exp.nickname}
+                          onClick={() => {
+                            playTick();
+                            setSelectedExpert(exp);
+                            setSubView('report');
+                            setEditingExpert(exp);
+                            setIsEditModalOpen(true);
+                            setIsNicknameDropdownOpen(false);
+                          }}
+                          className="flex items-center justify-between p-2 rounded-lg hover:bg-surface-200 cursor-pointer transition group"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-6 h-6 rounded bg-surface-200 border border-border-subtle flex items-center justify-center text-xs font-bold text-accent-orange">
+                              @{exp.nickname.slice(0, 1).toUpperCase()}
+                            </div>
+                            <div>
+                              <div className="text-xs font-bold text-white group-hover:text-accent-orange transition">
+                                @{exp.nickname}
+                              </div>
+                              <div className="text-[10px] text-zinc-300 font-mono">
+                                Охваты: {exp.coverage ? exp.coverage.toLocaleString() : '—'} • Болей: {exp.needs?.length || 0}
+                              </div>
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-mono text-accent-orange flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                            <span>Открыть меню</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div
+                    onClick={() => {
+                      handleSearchByNickname(nicknameInput);
+                      setIsNicknameDropdownOpen(false);
+                    }}
+                    className="p-2 rounded-lg hover:bg-surface-200 cursor-pointer transition text-xs text-accent-blue font-semibold flex items-center gap-2 border-t border-border-subtle mt-1"
+                  >
+                    <Search className="w-3.5 h-3.5" />
+                    <span>Искать на сервере «@{cleanNickQuery}» (:8083)</span>
+                  </div>
+
+                </div>
+              )}
             </div>
+
             <button
               type="submit"
               disabled={isSearchingNickname}
@@ -394,6 +493,8 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
                     playTick();
                     setSelectedExpert(exp);
                     setSubView('report');
+                    setEditingExpert(exp);
+                    setIsEditModalOpen(true);
                   }}
                 >
                   <div className="flex items-center justify-between">
@@ -448,7 +549,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
                   <div className="flex items-center justify-between text-[10px] font-mono text-zinc-300 pt-2 border-t border-border-subtle">
                     <span>Болей: {exp.needs ? exp.needs.length : 0} • Рычагов: {exp.levers ? exp.levers.length : 0}</span>
                     <span className="text-accent-orange flex items-center gap-1 group-hover:translate-x-0.5 transition font-semibold">
-                      <span>Открыть</span>
+                      <span>Открыть меню</span>
                       <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>
@@ -526,7 +627,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
                   title="Редактировать стратегию и боли эксперта"
                 >
                   <Edit3 className="w-3.5 h-3.5 text-accent-orange" />
-                  <span>Редактировать</span>
+                  <span>Редактировать меню</span>
                 </button>
 
                 <button

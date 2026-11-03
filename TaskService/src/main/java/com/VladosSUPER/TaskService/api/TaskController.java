@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/tasks")
 @RequiredArgsConstructor
 public class TaskController {

@@ -26,20 +26,20 @@ export const Header: React.FC<HeaderProps> = ({
   onQuickMeme
 }) => {
   return (
-    <header className="h-14 border-b border-border-subtle bg-surface-50/90 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30 select-none">
+    <header className="h-16 border-b-2 border-border-strong bg-surface-0/95 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30 select-none shadow-sm">
       
-      {/* Left Title & Counter */}
+      {/* Left Title & Counter (Bold Italic title as shown in Figma Desktop - 2) */}
       <div className="flex items-center gap-3">
-        <h1 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
+        <h1 className="text-xl font-black italic tracking-tight text-white flex items-center gap-2.5 drop-shadow-sm">
           <span>{title}</span>
           {taskCount !== undefined && (
-            <span className="text-xs font-mono text-zinc-400 font-normal">
-              ({taskCount})
+            <span className="text-xs font-mono font-medium not-italic text-zinc-300 bg-surface-100 border border-border-subtle px-2 py-0.5 rounded-full">
+              {taskCount}
             </span>
           )}
         </h1>
         {subtitle && (
-          <span className="hidden sm:inline text-xs text-zinc-400 border-l border-border-subtle pl-3">
+          <span className="hidden sm:inline text-xs text-zinc-300 border-l border-border-subtle pl-3 font-medium">
             {subtitle}
           </span>
         )}
@@ -47,13 +47,13 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Center Search Bar */}
       <div className="relative w-64 md:w-80 hidden sm:block">
-        <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <Search className="w-3.5 h-3.5 text-zinc-300 absolute left-3 top-1/2 -translate-y-1/2" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Поиск по задачам и проектам (⌘K)..."
-          className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-500 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-zinc-400 focus:outline-none"
+          className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-300 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-zinc-400 focus:outline-none transition"
         />
       </div>
 
@@ -70,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({
             className={`p-1.5 rounded-md text-xs transition ${
               viewMode === 'kanban'
                 ? 'bg-surface-300 text-white shadow-sm'
-                : 'text-zinc-400 hover:text-white'
+                : 'text-zinc-300 hover:text-white'
             }`}
             title="Канбан-доска"
           >
@@ -84,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
             className={`p-1.5 rounded-md text-xs transition ${
               viewMode === 'list'
                 ? 'bg-surface-300 text-white shadow-sm'
-                : 'text-zinc-400 hover:text-white'
+                : 'text-zinc-300 hover:text-white'
             }`}
             title="Линейный список"
           >
@@ -114,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
               playTick();
               onOpenCreateModal();
             }}
-            className="px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-bold transition flex items-center gap-1.5 shadow active:scale-95"
+            className="px-3.5 py-1.5 rounded-lg bg-white hover:bg-zinc-100 text-[#1f1818] text-xs font-bold transition flex items-center gap-1.5 shadow active:scale-95"
           >
             <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>Новая задача</span>

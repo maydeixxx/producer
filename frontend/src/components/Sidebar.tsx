@@ -4,7 +4,6 @@ import {
   Sparkles, 
   Palette, 
   Search, 
-  Bell, 
   Users, 
   Flame, 
   GraduationCap, 
@@ -56,11 +55,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside className="w-64 bg-surface-50 border-r border-border-subtle flex flex-col justify-between shrink-0 select-none h-screen sticky top-0">
+    <aside className="w-64 bg-surface-50 border-r-2 border-border-strong flex flex-col justify-between shrink-0 select-none h-screen sticky top-0 shadow-lg">
       
       {/* Top Branding */}
       <div>
-        <div className="p-4 border-b border-[#1b1b22] flex items-center justify-between">
+        <div className="p-4 border-b border-border-subtle flex items-center justify-between">
           <div 
             onClick={() => handleNavClick('tasks')} 
             className="flex items-center gap-3 cursor-pointer group"
@@ -69,16 +68,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <img 
                 src={currentPersonaImg} 
                 alt="Кабан" 
-                className="w-8 h-8 rounded-lg object-cover border border-[#2b2b36] group-hover:border-accent-orange transition" 
+                className="w-8 h-8 rounded-lg object-cover border border-border-subtle group-hover:border-accent-orange transition" 
               />
-              <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent-green border-2 border-black" />
+              <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 rounded-full bg-accent-green border-2 border-surface-50" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-sm font-bold text-white tracking-tight">ProducerOS</span>
                 <span className="text-[9px] font-mono text-accent-orange bg-orange-950/40 border border-orange-900/60 px-1 py-0.2 rounded font-semibold">Pro</span>
               </div>
-              <div className="text-[10px] text-zinc-500 font-mono">Штаб Кабана</div>
+              <div className="text-[10px] text-zinc-300 font-mono">Штаб Кабана</div>
             </div>
           </div>
         </div>
@@ -88,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           
           {/* Main Views */}
           <div className="space-y-1">
-            <div className="text-[10px] font-mono uppercase text-zinc-500 px-2.5 py-1 tracking-wider font-semibold">
+            <div className="text-[10px] font-mono uppercase text-zinc-400 px-2.5 py-1 tracking-wider font-semibold">
               Задачи & Проекты
             </div>
 
@@ -96,30 +95,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleFilterClick('ALL')}
               className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
                 currentTab === 'tasks' && taskFilter === 'ALL'
-                  ? 'bg-zinc-800/80 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                  ? 'bg-surface-300 text-white font-semibold'
+                  : 'text-zinc-300 hover:text-white hover:bg-surface-200'
               }`}
             >
               <div className="flex items-center gap-2">
-                <CheckSquare className="w-3.5 h-3.5 text-zinc-400" />
+                <CheckSquare className="w-3.5 h-3.5 text-zinc-300" />
                 <span>Все задачи</span>
               </div>
-              <span className="text-[11px] font-mono text-zinc-500">{taskCounts.total}</span>
+              <span className="text-[11px] font-mono text-zinc-400">{taskCounts.total}</span>
             </button>
 
             <button
               onClick={() => handleFilterClick('URGENT')}
               className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
                 currentTab === 'tasks' && taskFilter === 'URGENT'
-                  ? 'bg-red-950/30 text-accent-red border border-red-900/40'
-                  : 'text-zinc-400 hover:text-accent-red hover:bg-zinc-900/50'
+                  ? 'bg-red-950/40 text-accent-red border border-red-900/50 font-semibold'
+                  : 'text-zinc-300 hover:text-accent-red hover:bg-surface-200'
               }`}
             >
               <div className="flex items-center gap-2">
                 <Flame className="w-3.5 h-3.5 text-accent-red animate-pulse" />
                 <span className="text-accent-red font-semibold">Горят дедлайны</span>
               </div>
-              <span className="text-[10px] font-mono font-bold bg-accent-red/20 text-accent-red px-1.5 py-0.5 rounded">
+              <span className="text-[10px] font-mono font-bold bg-accent-red/25 text-accent-red px-1.5 py-0.5 rounded">
                 {taskCounts.urgent}
               </span>
             </button>
@@ -128,51 +127,36 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleFilterClick('UNIVERSITY')}
               className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
                 currentTab === 'tasks' && taskFilter === 'UNIVERSITY'
-                  ? 'bg-zinc-800/80 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                  ? 'bg-surface-300 text-white font-semibold'
+                  : 'text-zinc-300 hover:text-white hover:bg-surface-200'
               }`}
             >
               <div className="flex items-center gap-2">
-                <GraduationCap className="w-3.5 h-3.5 text-accent-blue" />
-                <span>Универ & Лабы</span>
+                <GraduationCap className="w-3.5 h-3.5 text-blue-300" />
+                <span>Универ</span>
               </div>
-              <span className="text-[11px] font-mono text-zinc-500">{taskCounts.university}</span>
+              <span className="text-[11px] font-mono text-zinc-400">{taskCounts.university}</span>
             </button>
 
             <button
               onClick={() => handleFilterClick('LAUNCH')}
               className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
                 currentTab === 'tasks' && taskFilter === 'LAUNCH'
-                  ? 'bg-zinc-800/80 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                  ? 'bg-surface-300 text-white font-semibold'
+                  : 'text-zinc-300 hover:text-white hover:bg-surface-200'
               }`}
             >
               <div className="flex items-center gap-2">
-                <Briefcase className="w-3.5 h-3.5 text-accent-green" />
-                <span>Запуски экспертов</span>
+                <Briefcase className="w-3.5 h-3.5 text-accent-orange" />
+                <span>Запуск</span>
               </div>
-              <span className="text-[11px] font-mono text-zinc-500">{taskCounts.launch}</span>
-            </button>
-
-            <button
-              onClick={() => handleFilterClick('SELF')}
-              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
-                currentTab === 'tasks' && taskFilter === 'SELF'
-                  ? 'bg-zinc-800/80 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-xs">🐗</span>
-                <span>Владик / Личное</span>
-              </div>
-              <span className="text-[11px] font-mono text-zinc-500">{taskCounts.self}</span>
+              <span className="text-[11px] font-mono text-zinc-400">{taskCounts.launch}</span>
             </button>
           </div>
 
-          {/* Special Meme Modules */}
+          {/* Vladik Ecosystem Modules */}
           <div className="space-y-1">
-            <div className="text-[10px] font-mono uppercase text-zinc-500 px-2.5 py-1 tracking-wider font-semibold">
+            <div className="text-[10px] font-mono uppercase text-zinc-400 px-2.5 py-1 tracking-wider font-semibold">
               Мемология & AI
             </div>
 
@@ -180,23 +164,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleNavClick('memes')}
               className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
                 currentTab === 'memes'
-                  ? 'bg-orange-950/30 text-accent-orange border border-orange-900/50'
-                  : 'text-zinc-400 hover:text-accent-orange hover:bg-zinc-900/50'
+                  ? 'bg-surface-300 text-white font-semibold'
+                  : 'text-zinc-300 hover:text-white hover:bg-surface-200'
               }`}
             >
               <div className="flex items-center gap-2">
                 <Sparkles className="w-3.5 h-3.5 text-accent-orange" />
-                <span>Мемология (12 мемов)</span>
+                <span>Мемотека</span>
               </div>
-              <span className="text-[9px] font-mono bg-accent-orange/20 text-accent-orange px-1 rounded">HOT</span>
+              <span className="text-[9px] font-mono bg-accent-orange/20 text-accent-orange px-1 rounded font-bold">HOT</span>
             </button>
 
             <button
               onClick={() => handleNavClick('generator')}
               className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
                 currentTab === 'generator'
-                  ? 'bg-zinc-800/80 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                  ? 'bg-surface-300 text-white font-semibold'
+                  : 'text-zinc-300 hover:text-white hover:bg-surface-200'
               }`}
             >
               <Palette className="w-3.5 h-3.5 text-accent-purple" />
@@ -207,8 +191,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => handleNavClick('scout')}
               className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
                 currentTab === 'scout'
-                  ? 'bg-zinc-800/80 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                  ? 'bg-surface-300 text-white font-semibold'
+                  : 'text-zinc-300 hover:text-white hover:bg-surface-200'
               }`}
             >
               <Search className="w-3.5 h-3.5 text-accent-blue" />
@@ -216,26 +200,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
 
             <button
-              onClick={() => handleNavClick('watchdog')}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
-                currentTab === 'watchdog'
-                  ? 'bg-zinc-800/80 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
-              }`}
-            >
-              <Bell className="w-3.5 h-3.5 text-zinc-400" />
-              <span>Watchdog (Telegram)</span>
-            </button>
-
-            <button
               onClick={() => handleNavClick('roster')}
               className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${
                 currentTab === 'roster'
-                  ? 'bg-zinc-800/80 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-900/50'
+                  ? 'bg-surface-300 text-white font-semibold'
+                  : 'text-zinc-300 hover:text-white hover:bg-surface-200'
               }`}
             >
-              <Users className="w-3.5 h-3.5 text-zinc-400" />
+              <Users className="w-3.5 h-3.5 text-zinc-300" />
               <span>Кентос-Хаб (12 ипостасей)</span>
             </button>
           </div>
@@ -274,34 +246,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* System Status */}
-        <div className="flex items-center justify-between text-[11px] font-medium text-zinc-400 bg-surface-200 px-3 py-2 rounded-lg border border-border-subtle">
+        <div className="flex items-center justify-between text-[11px] font-medium text-zinc-300 bg-surface-200 px-3 py-2 rounded-lg border border-border-subtle">
           <div className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full ${backendStatus.task && backendStatus.scan ? 'bg-accent-green' : 'bg-accent-orange'}`} />
             <span className="text-zinc-200 font-sans">
               {backendStatus.task && backendStatus.scan ? 'Сервисы активны' : 'Синхронизация'}
             </span>
           </div>
-          <span className="text-[10px] text-zinc-400 font-mono">v1.2</span>
+          <span className="text-[10px] text-zinc-300 font-mono">v1.2</span>
         </div>
 
         {/* Vladik Interactive Pill */}
         <div 
           onClick={onCyclePersona}
-          className="flex items-center justify-between p-2 rounded-lg panel hover:border-zinc-700 cursor-pointer transition group"
+          className="flex items-center justify-between p-2 rounded-lg panel hover:border-zinc-400 cursor-pointer transition group"
           title="Кликни, чтобы сменить образ Владика"
         >
           <div className="flex items-center gap-2">
             <img 
               src={currentPersonaImg} 
               alt="Владик" 
-              className="w-6 h-6 rounded-md object-cover border border-zinc-700 group-hover:scale-105 transition"
+              className="w-6 h-6 rounded-md object-cover border border-border-subtle group-hover:scale-105 transition"
             />
             <div className="text-left">
-              <div className="text-[11px] font-bold text-zinc-300 group-hover:text-white leading-none">Владик</div>
+              <div className="text-[11px] font-bold text-zinc-200 group-hover:text-white leading-none">Владик</div>
               <div className="text-[9px] text-accent-orange font-mono">Кабан ебаный</div>
             </div>
           </div>
-          <span className="text-zinc-600 group-hover:text-zinc-400 text-xs">↻</span>
+          <span className="text-zinc-400 group-hover:text-zinc-200 text-xs">↻</span>
         </div>
 
       </div>

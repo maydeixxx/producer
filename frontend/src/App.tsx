@@ -291,7 +291,7 @@ export const App: React.FC = () => {
   // Cycle Persona
   const handleCyclePersona = () => {
     playTick();
-    const nextIdx = (personaIndex % 12) + 1;
+    const nextIdx = (personaIndex % PERSONAS.length) + 1;
     setPersonaIndex(nextIdx);
     const p = PERSONAS.find(x => x.id === nextIdx) || PERSONAS[0];
     setReactionToast({
@@ -354,11 +354,11 @@ export const App: React.FC = () => {
             currentTab === 'memes' ? 'Мемология Владика' :
             currentTab === 'generator' ? 'Мемогенератор Studio' :
             currentTab === 'scout' ? 'InstaScout AI' :
-            '12 Ипостасей Владика'
+            '33 Ипостаси Владика'
           }
           subtitle={
             currentTab === 'tasks' ? (taskFilter === 'ALL' ? 'Все категории' : taskFilter) :
-            currentTab === 'memes' ? '12 боевых мемов' :
+            currentTab === 'memes' ? '33 боевых мема' :
             undefined
           }
           taskCount={currentTab === 'tasks' ? taskCounts.total : undefined}

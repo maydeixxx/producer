@@ -208,7 +208,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               }`}
             >
               <Users className="w-3.5 h-3.5 text-zinc-300" />
-              <span>Кентос-Хаб (12 ипостасей)</span>
+              <span>Кентос-Хаб (33 ипостаси)</span>
             </button>
           </div>
 

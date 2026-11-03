@@ -22,7 +22,7 @@ export const RosterPage: React.FC<RosterPageProps> = ({ onSelectPersona }) => {
       <div className="panel p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <span>🐗 Кентос-Хаб: 12 боевых ипостасей Владика</span>
+            <span>🐗 Кентос-Хаб: 33 боевые ипостаси Владика</span>
           </h2>
           <p className="text-[11px] text-zinc-500 font-mono mt-0.5">
             Все персонажи разблокированы. Кликни по карточке, чтобы включить его личный режим в шапке.

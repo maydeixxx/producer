@@ -178,7 +178,7 @@ export const MemeGeneratorPage: React.FC<MemeGeneratorPageProps> = ({ initialMem
             <span>🎨</span> Мемогенератор «Владик Studio»
           </h2>
           <p className="text-xs text-zinc-400 mt-0.5">
-            Создай мем с лицом кента за 5 секунд. Выбирай любое из 12 фото, накладывай панчлайны и скачивай PNG!
+            Создай мем с лицом кента за 5 секунд. Выбирай любое из 33 фото, накладывай панчлайны и скачивай PNG!
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -206,14 +206,14 @@ export const MemeGeneratorPage: React.FC<MemeGeneratorPageProps> = ({ initialMem
           
           {/* Photo Strip */}
           <div className="panel p-4 rounded-xl space-y-2">
-            <label className="text-xs font-bold text-white block">1. Выбери фото Владика (1 из 12)</label>
-            <div className="grid grid-cols-6 gap-2 max-h-48 overflow-y-auto p-1">
-              {Array.from({ length: 12 }, (_, i) => i + 1).map(num => (
+            <label className="text-xs font-bold text-white block">1. Выбери фото Владика (1 из 33)</label>
+            <div className="grid grid-cols-6 sm:grid-cols-7 gap-2 max-h-56 overflow-y-auto p-1">
+              {Array.from({ length: 33 }, (_, i) => i + 1).map(num => (
                 <div
                   key={num}
                   onClick={() => { playTick(); setSelectedPhoto(num); }}
                   className={`aspect-square rounded-lg overflow-hidden border-2 cursor-pointer transition ${
-                    selectedPhoto === num ? 'border-accent-orange scale-105' : 'border-zinc-800 hover:border-zinc-500'
+                    selectedPhoto === num ? 'border-accent-orange scale-105' : 'border-zinc-700 hover:border-zinc-400'
                   }`}
                 >
                   <img src={`/assets/vlad_${num}.jpg`} alt={`Владик ${num}`} className="w-full h-full object-cover" />

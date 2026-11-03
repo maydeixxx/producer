@@ -129,22 +129,41 @@ public class ExpertService {
                 .collect(Collectors.joining(" ---- "));
 
         String prompt = """
-                Ты маркетолог и продюсер. Проанализируй тексты постов эксперта в Instagram:
+                Ты — топовый коммерческий инфобизнес-продюсер и ведущий эксперт по CustDev.
+                Твоя задача — провести глубокий анализ аудитории эксперта по текстам его постов:
                 ---
-                Тексты постов через  ----  = %s
-                ...
+                Тексты постов:
+                %s
                 ---
                 
-                На основе этих постов определи:
-                1. targetAud: кто целевая аудитория блога (описание сегмента, статус, боли).
-                2. needs: список из 5-10 ключевых болей/потребностей этой ЦА (почему они читают блог, что у них болит).
-                3. levers: список из 5-10 рычагов/триггеров (обещания, триггеры свободы/дохода/признания, на которые они реагируют).
+                Проанализируй контент и сформируй выжимку СТРОГО по методологии реального кастдева:
                 
-                Верни СТРОГО JSON и ничего больше, не пиши свои размышления, отдай ТОЛЬКО JSON:
+                1. targetAud:
+                   Опиши ключевой сегмент ЦА: их текущая жизненная ситуация, контекст (декрет, найм 5/2, быт, потолок дохода) и главная дилемма (например: «хотят больше денег, но боятся потерять семью/время»).
+                
+                2. needs (Боли и скрытые желания):
+                   Выдели от 5 до 8 глубоких болей аудитории. 
+                   ВАЖНОЕ ПРАВИЛО: Формулируй каждую боль через ЖИВУЮ РЕЧЬ аудитории (как будто они пишут в анкете или думают ночью).
+                   Формат каждого пункта:
+                   Суть боли — «Живая фраза в кавычках» (например: Зависимость и отсутствие своих денег — «Хочется не выпрашивать у мужа на каждую мелочь, а иметь свою подушку безопасности»).
+                
+                3. levers (Рычаги влияния и смысловые связки для контента):
+                   Выдели от 5 до 8 конкретных рычагов. 
+                   ВАЖНОЕ ПРАВИЛО: Рычаг — это не абстрактное слово («статус»), а КОНКРЕТНАЯ СМЫСЛОВАЯ СВЯЗКА ДЛЯ КОНТЕНТА: что эксперт должен показать/рассказать в блоге, чтобы закрыть конкретный страх аудитории.
+                   Формат каждого пункта:
+                   Страх/возражение -> Что показать в контенте (например: Возражение «У меня нет времени и ребенок не дает» -> Показать формат «День мамы-предпринимателя»: как работать всего 1–2 часа в день без ущерба семье).
+                
+                Ответь СТРОГО валидным JSON-объектом без лишних символов и без markdown-разметки:
                 {
-                  "targetAud": "Строка с описанием ЦА",
-                  "needs": ["потребность 1", "потребность 2"],
-                  "levers": ["рычаг 1", "рычаг 2"]
+                  "targetAud": "Глубокое описание сегмента ЦА",
+                  "needs": [
+                    "Боль 1 — «Живая фраза аудитории»",
+                    "Боль 2 — «Живая фраза аудитории»"
+                  ],
+                  "levers": [
+                    "Страх/Боль -> Какую связку/историю показать в контенте",
+                    "Возражение -> Какую связку/историю показать в контенте"
+                  ]
                 }
                 """.formatted(captions);
         String body = objectMapper.writeValueAsString(Map.of(
@@ -190,6 +209,8 @@ public class ExpertService {
             List<String> levers = content.get("levers").valueStream()
                     .map(JsonNode::asString)
                     .toList();
+
+            content.get("targetAud").asString();
             return new AiAnalysisResponse(content.get("targetAud").asString(), needs, levers, coverage);
         } catch (Exception e) {
             log.error("Error processing request: ", e);
@@ -214,7 +235,8 @@ public class ExpertService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 201) throw new IllegalStateException("Status code is not 201");
-            if (response.body() == null || response.body().isBlank()) throw new InstagramParsingException("Cant get info for %s".formatted(nickname));
+            if (response.body() == null || response.body().isBlank())
+                throw new InstagramParsingException("Cant get info for %s".formatted(nickname));
 
             String body = response.body();
             ArrayNode arrayNode = objectMapper.readTree(body).asArray();
@@ -223,7 +245,8 @@ public class ExpertService {
             if (jsonNode.has("errorDescription")) {
                 String errorDescription = jsonNode.get("errorDescription").asString();
                 if (errorDescription != null && !errorDescription.isBlank()) {
-                    if (errorDescription.contains("private")) throw new InstagramParsingException("%s profile is private".formatted(nickname));
+                    if (errorDescription.contains("private"))
+                        throw new InstagramParsingException("%s profile is private".formatted(nickname));
                 }
             }
 

@@ -1,4 +1,4 @@
-CREATE TABLE tasks (
+CREATE TABLE tasks(
     id UUID PRIMARY KEY,
     task_type varchar(255) NOT NULL,
     task_status varchar(255) NOT NULL,

@@ -17,6 +17,7 @@ interface TasksPageProps {
   onUpdateStatus: (id: string, newStatus: Task['taskStatus']) => void;
   onDeleteTask: (id: string) => void;
   onOpenCreateModal: () => void;
+  isLoading?: boolean;
 }
 
 export const TasksPage: React.FC<TasksPageProps> = ({
@@ -27,6 +28,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   onUpdateStatus,
   onDeleteTask,
   onOpenCreateModal,
+  isLoading
 }) => {
   // Filter logic
   const filteredTasks = tasks.filter(t => {
@@ -84,6 +86,28 @@ export const TasksPage: React.FC<TasksPageProps> = ({
 
   // Urgent top task
   const urgentTask = tasks.find(t => t.taskPriority === 'HIGH' && t.taskType === 'UNIVERSITY' && t.taskStatus !== 'DONE');
+
+  if (!isLoading && tasks.length === 0) {
+    return (
+      <div className="panel p-12 rounded-2xl text-center space-y-4 border border-dashed border-zinc-800">
+        <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto text-2xl shadow">
+          🐗
+        </div>
+        <div className="space-y-1">
+          <h3 className="text-base font-bold text-white">В базе данных PostgreSQL пока нет задач</h3>
+          <p className="text-xs text-zinc-500 font-mono max-w-md mx-auto">
+            Таблица tasks в tasks_db (:5432) пуста. Создай первую задачу, и она мгновенно сохранится в базу данных.
+          </p>
+        </div>
+        <button
+          onClick={onOpenCreateModal}
+          className="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-bold transition shadow"
+        >
+          + Создать первую задачу в БД
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

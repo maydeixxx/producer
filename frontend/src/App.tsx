@@ -34,58 +34,24 @@ export const App: React.FC = () => {
 
   const [backendStatus, setBackendStatus] = useState({ task: false, scan: false });
 
-  // Default tasks fallback
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: 'demo-1',
-      title: 'Сдать лабу №3 по Базам Данных',
-      description: 'Горит пожаром до 23:59. Научрук активирует режим отчисления, если не сдать сегодня.',
-      taskType: 'UNIVERSITY',
-      taskPriority: 'HIGH',
-      taskStatus: 'PROCESSING',
-      deadline: '2026-11-03'
-    },
-    {
-      id: 'demo-2',
-      title: 'Отрегулировать клаксон и вафледрон',
-      description: 'Проверить боевой гудок на 140 дБ перед прямым эфиром по запуску эксперта.',
-      taskType: 'SELF',
-      taskPriority: 'HIGH',
-      taskStatus: 'TODO',
-      deadline: '2026-11-04'
-    },
-    {
-      id: 'demo-3',
-      title: 'Прогрев для курса «Кабан ебаный»',
-      description: 'Написать 5 сценариев для рилсов на тему выхода на миллион без выгорания.',
-      taskType: 'LAUNCH',
-      taskPriority: 'MEDIUM',
-      taskStatus: 'PROCESSING',
-      deadline: '2026-11-06'
-    },
-    {
-      id: 'demo-4',
-      title: 'Сэр похмелье: восстановить водно-солевой баланс',
-      description: 'Выпить 2 литра минералки после караоке, подготовиться к созвону с клиентом.',
-      taskType: 'SELF',
-      taskPriority: 'LOW',
-      taskStatus: 'DONE',
-      deadline: '2026-11-02'
-    }
-  ]);
+  // STRICT REAL DATABASE DATA — NO MOCKS
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [isLoadingTasks, setIsLoadingTasks] = useState<boolean>(true);
 
-  // Fetch tasks from TaskService (:8081)
+  // Fetch real tasks from TaskService (:8081)
   const fetchTasks = async () => {
     try {
       const res = await fetch(TASK_API);
       if (res.ok) {
         const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setTasks(data);
         }
       }
     } catch {
-      // Keep demo tasks if server is offline
+      // Backend unreachable
+    } finally {
+      setIsLoadingTasks(false);
     }
   };
 
@@ -114,22 +80,25 @@ export const App: React.FC = () => {
   useEffect(() => {
     fetchTasks();
     checkHealth();
-    const interval = setInterval(checkHealth, 10000);
+    const interval = setInterval(() => {
+      checkHealth();
+      fetchTasks();
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
-  // Update task status with meme reactions
+  // Update task status with meme reactions & real DB sync
   const handleUpdateStatus = async (taskId: string, newStatus: Task['taskStatus']) => {
     playTick();
+    // Optimistic UI update
     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, taskStatus: newStatus } : t));
 
-    // Reactions
     if (newStatus === 'DONE') {
       triggerBeerToast();
       setReactionToast({
         img: '/assets/vlad_11.jpg',
         title: 'ТРИУМФ КАБАНА!',
-        quote: '«Задача закрыта! Накрывай поляну, Кабан угощает!»'
+        quote: '«Задача закрыта в базе данных! Накрывай поляну!»'
       });
     } else if (newStatus === 'PROCESSING') {
       triggerBoarRoar();
@@ -141,34 +110,40 @@ export const App: React.FC = () => {
     }
 
     try {
-      await fetch(TASK_API, {
+      const res = await fetch(TASK_API, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ taskId, type: 'status', newStatus })
       });
+      if (res.ok) {
+        await fetchTasks();
+      }
     } catch {
-      // local state already updated
+      // Keep optimistic
     }
   };
 
-  // Delete task
+  // Delete task from DB
   const handleDeleteTask = async (taskId: string) => {
     playTick();
     setTasks(prev => prev.filter(t => t.id !== taskId));
     setReactionToast({
       img: '/assets/vlad_8.jpg',
       title: 'ШВАБРА ОПЕРАТИВНАЯ!',
-      quote: '«Швабра вымела эту задачу нахуй из бэклога!»'
+      quote: '«Швабра вымела задачу из PostgreSQL!»'
     });
 
     try {
-      await fetch(`${TASK_API}/${taskId}`, { method: 'DELETE' });
+      const res = await fetch(`${TASK_API}/${taskId}`, { method: 'DELETE' });
+      if (res.ok) {
+        await fetchTasks();
+      }
     } catch {
-      // local state already updated
+      //
     }
   };
 
-  // Create new task
+  // Create new task in DB
   const handleCreateTask = async (taskData: {
     title: string;
     description: string;
@@ -176,33 +151,33 @@ export const App: React.FC = () => {
     taskPriority: Task['taskPriority'];
     deadline: string;
   }) => {
-    const newTask: Task = {
-      id: 'task-' + Date.now(),
+    playTick();
+
+    const payload = {
       title: taskData.title,
-      description: taskData.description,
+      description: taskData.description.trim() || 'Создано из ProducerOS',
       taskType: taskData.taskType,
       taskPriority: taskData.taskPriority,
-      taskStatus: 'TODO',
-      deadline: taskData.deadline,
-      createdAt: new Date().toISOString()
+      deadline: taskData.deadline || new Date().toISOString().split('T')[0]
     };
-
-    setTasks(prev => [newTask, ...prev]);
 
     setReactionToast({
       img: '/assets/vlad_6.jpg',
-      title: 'НОВАЯ ЗАДАЧА В БАЗЕ!',
-      quote: '«Клаксон взведён! До дедлайна ни шагу назад!»'
+      title: 'НОВАЯ ЗАДАЧА В БД!',
+      quote: '«Задача сохранена в PostgreSQL :5432! Клаксон взведён!»'
     });
 
     try {
-      await fetch(TASK_API, {
+      const res = await fetch(TASK_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(taskData)
+        body: JSON.stringify(payload)
       });
+      if (res.ok) {
+        await fetchTasks();
+      }
     } catch {
-      // local state already updated
+      //
     }
   };
 
@@ -236,7 +211,7 @@ export const App: React.FC = () => {
     triggerKlaxon();
   };
 
-  // Task Counts
+  // Task Counts from REAL tasks
   const taskCounts = {
     total: tasks.length,
     urgent: tasks.filter(t => t.taskPriority === 'HIGH' && t.taskStatus !== 'DONE').length,
@@ -268,7 +243,7 @@ export const App: React.FC = () => {
         {/* Header */}
         <Header
           title={
-            currentTab === 'tasks' ? 'Задачи Кабана' :
+            currentTab === 'tasks' ? 'Задачи Кабана (PostgreSQL)' :
             currentTab === 'memes' ? 'Мемология Владика' :
             currentTab === 'generator' ? 'Мемогенератор Studio' :
             currentTab === 'scout' ? 'InstaScout AI' :
@@ -276,7 +251,7 @@ export const App: React.FC = () => {
             '12 Ипостасей Владика'
           }
           subtitle={
-            currentTab === 'tasks' ? (taskFilter === 'ALL' ? 'Все категории' : taskFilter) :
+            currentTab === 'tasks' ? (taskFilter === 'ALL' ? 'tasks_db :5432' : taskFilter) :
             currentTab === 'memes' ? '12 боевых мемов' :
             undefined
           }
@@ -300,6 +275,7 @@ export const App: React.FC = () => {
               onUpdateStatus={handleUpdateStatus}
               onDeleteTask={handleDeleteTask}
               onOpenCreateModal={() => setIsCreateModalOpen(true)}
+              isLoading={isLoadingTasks}
             />
           )}
 

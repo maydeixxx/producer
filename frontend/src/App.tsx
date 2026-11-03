@@ -5,7 +5,6 @@ import { TasksPage } from './components/TasksPage';
 import { MemesPage } from './components/MemesPage';
 import { MemeGeneratorPage } from './components/MemeGeneratorPage';
 import { InstaScoutPage } from './components/InstaScoutPage';
-import { WatchdogPage } from './components/WatchdogPage';
 import { RosterPage } from './components/RosterPage';
 import { CreateTaskModal } from './components/CreateTaskModal';
 import { EditTaskModal } from './components/EditTaskModal';
@@ -316,11 +315,10 @@ export const App: React.FC = () => {
         {/* Header */}
         <Header
           title={
-            currentTab === 'tasks' ? 'Задачи Кабана' :
+            currentTab === 'tasks' ? 'Tasks Кабана' :
             currentTab === 'memes' ? 'Мемология Владика' :
             currentTab === 'generator' ? 'Мемогенератор Studio' :
             currentTab === 'scout' ? 'InstaScout AI' :
-            currentTab === 'watchdog' ? 'Швабра-Сторож' :
             '12 Ипостасей Владика'
           }
           subtitle={
@@ -380,16 +378,6 @@ export const App: React.FC = () => {
                 setCurrentTab('tasks');
               }}
               onShowReaction={(img, title, quote) => setReactionToast({ img, title, quote })}
-            />
-          )}
-
-          {currentTab === 'watchdog' && (
-            <WatchdogPage
-              onShowToast={(msg) => setReactionToast({
-                img: '/assets/vlad_2.jpg',
-                title: 'WATCHDOG АКТИВЕН',
-                quote: msg
-              })}
             />
           )}
 

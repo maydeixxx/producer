@@ -3,13 +3,16 @@ package com.VladosSUPER.ScanService.services;
 import com.VladosSUPER.ScanService.models.domain.ExpertDomain;
 import com.VladosSUPER.ScanService.models.dtos.AiAnalysisResponse;
 import com.VladosSUPER.ScanService.models.dtos.ExpertDto;
+import com.VladosSUPER.ScanService.models.dtos.ExpertUpdateDto;
 import com.VladosSUPER.ScanService.models.dtos.InstagramPost;
 import com.VladosSUPER.ScanService.models.entity.Expert;
+import com.VladosSUPER.ScanService.models.exceptions.ExpertNotFoundException;
 import com.VladosSUPER.ScanService.models.exceptions.InstagramParsingException;
+import com.VladosSUPER.ScanService.models.exceptions.UpdateStrategyNotFound;
 import com.VladosSUPER.ScanService.services.interfaces.ExpertRepository;
+import com.VladosSUPER.ScanService.services.interfaces.ExpertUpdateStrategy;
 import com.VladosSUPER.ScanService.services.misc.ExpertMapper;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,19 +25,17 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ExpertService {
     private final ExpertMapper expertMapper;
     private final ExpertRepository expertRepository;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
+    private final Map<String, ExpertUpdateStrategy> updateStrategyMap;
 
     @Value("${ai.api-key}")
     private String apiKey;
@@ -45,12 +46,25 @@ public class ExpertService {
     @Value("${scraper.token}")
     private String scraperToken;
 
+
+    public ExpertService(ExpertMapper expertMapper, ExpertRepository expertRepository, HttpClient httpClient, ObjectMapper objectMapper, List<ExpertUpdateStrategy> updateStrategyList) {
+        this.expertMapper = expertMapper;
+        this.expertRepository = expertRepository;
+        this.httpClient = httpClient;
+        this.objectMapper = objectMapper;
+        this.updateStrategyMap = new HashMap<>();
+
+        for (ExpertUpdateStrategy strategy : updateStrategyList) {
+            this.updateStrategyMap.putIfAbsent(strategy.getType(), strategy);
+        }
+    }
+
     @Transactional
     public ExpertDto addNewExpert(String expertLink) {
         if (expertLink == null || expertLink.isBlank()) {
             throw new IllegalArgumentException("Expert link cant be null or blank");
         }
-        String expertNickname = expertLink.split("/")[3];
+        String expertNickname = expertLink.split("/")[3].toLowerCase();
         AiAnalysisResponse aiAnalysisResponse = scanProfile(expertLink);
 
         ExpertDomain newExpert = ExpertDomain.createExpert(
@@ -66,6 +80,39 @@ public class ExpertService {
         expertRepository.save(expert);
 
         return expertMapper.entityToDto(expert);
+    }
+
+    @Transactional
+    public void deleteExpert(String nickname) {
+        expertRepository.deleteByExpertNickname(nickname.toLowerCase().trim());
+    }
+
+    @Transactional
+    public void updateExpert(ExpertUpdateDto dto) {
+        Expert expert = expertRepository.findById(dto.id()).orElseThrow(() -> new ExpertNotFoundException("Expert %s not found".formatted(dto.id())));
+        ExpertDomain expertDomain = expertMapper.entityToDomain(expert);
+
+        ExpertUpdateStrategy strategy = updateStrategyMap.get(dto.strategy());
+        if (strategy == null) throw new UpdateStrategyNotFound("Strategy %s not found".formatted(dto.strategy()));
+
+        strategy.update(dto, expertDomain);
+        expertRepository.save(expertMapper.domainToEntity(expertDomain));
+    }
+
+    public ExpertDto findExpertById(UUID id) {
+        Expert expert = expertRepository.findById(id).orElseThrow(() -> new ExpertNotFoundException("Expert %s not found".formatted(id)));
+        return expertMapper.entityToDto(expert);
+    }
+
+    public ExpertDto findExpertByNickname(String nickname) {
+        Expert expert = expertRepository.findByExpertNickname(nickname.toLowerCase().trim()).orElseThrow(() -> new ExpertNotFoundException("Expert %s not found".formatted(nickname)));
+        return expertMapper.entityToDto(expert);
+    }
+
+    public List<ExpertDto> findAll() {
+        return expertRepository.findAll().stream()
+                .map(expertMapper::entityToDto)
+                .toList();
     }
 
     private AiAnalysisResponse scanProfile(String link) {
@@ -137,11 +184,11 @@ public class ExpertService {
 
             if (content == null) throw new IllegalArgumentException("Cant get response from ai");
             List<String> needs = content.get("needs").asArray().valueStream()
-                    .map(JsonNode::toString)
+                    .map(JsonNode::asString)
                     .toList();
 
             List<String> levers = content.get("levers").valueStream()
-                    .map(JsonNode::toString)
+                    .map(JsonNode::asString)
                     .toList();
             return new AiAnalysisResponse(content.get("targetAud").asString(), needs, levers, coverage);
         } catch (Exception e) {

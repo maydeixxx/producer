@@ -83,7 +83,7 @@ public class ExpertDomain {
 
     public void removeNeed(String need) {
         if (need == null) throw new IllegalArgumentException("Need cant be null");
-        this.needs.remove(need);
+        this.needs.remove(need.toLowerCase());
     }
 
     public void addNewLever(String newLever) {

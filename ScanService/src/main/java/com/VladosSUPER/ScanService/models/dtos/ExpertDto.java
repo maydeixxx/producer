@@ -7,6 +7,7 @@ public record ExpertDto(
         UUID id,
         String expertLink,
         String nickname,
+        String targetAud,
         long coverage,
         List<String> needs,
         List<String> levers

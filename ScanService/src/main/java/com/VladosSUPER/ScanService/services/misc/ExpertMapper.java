@@ -37,6 +37,7 @@ public class ExpertMapper {
                 expert.getId(),
                 expert.getExpertLink(),
                 expert.getExpertNickname(),
+                expert.getTargetAud(),
                 expert.getCoverage(),
                 expert.getNeeds(),
                 expert.getLevers()

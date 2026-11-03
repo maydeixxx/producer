@@ -4,7 +4,8 @@ import {
   Trash2, 
   ArrowRight, 
   CheckCircle2, 
-  Clock 
+  Clock,
+  Edit3
 } from 'lucide-react';
 import { Task, TaskType } from '../types';
 import { playTick } from './AudioSynthesizer';
@@ -15,6 +16,7 @@ interface TasksPageProps {
   filter: string;
   searchQuery: string;
   onUpdateStatus: (id: string, newStatus: Task['taskStatus']) => void;
+  onEditTask: (task: Task) => void;
   onDeleteTask: (id: string) => void;
   onOpenCreateModal: () => void;
   isLoading?: boolean;
@@ -26,6 +28,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   filter,
   searchQuery,
   onUpdateStatus,
+  onEditTask,
   onDeleteTask,
   onOpenCreateModal,
   isLoading
@@ -63,7 +66,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
       case 'LAUNCH':
         return <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-green-950/40 text-accent-green border border-green-900/50">💼 Запуск</span>;
       case 'SELF':
-        return <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-950/40 text-accent-orange border border-orange-900/50">🐗 Владик</span>;
+        return <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-950/40 text-accent-orange border border-orange-900/50">🐗 Личное</span>;
     }
   };
 
@@ -72,9 +75,9 @@ export const TasksPage: React.FC<TasksPageProps> = ({
       case 'HIGH':
         return <span className="text-[9px] font-mono text-accent-red flex items-center gap-1 font-bold">● HIGH</span>;
       case 'MEDIUM':
-        return <span className="text-[9px] font-mono text-accent-yellow flex items-center gap-1">● MED</span>;
+        return <span className="text-[9px] font-mono text-accent-yellow flex items-center gap-1 font-semibold">● MED</span>;
       case 'LOW':
-        return <span className="text-[9px] font-mono text-zinc-500 flex items-center gap-1">○ LOW</span>;
+        return <span className="text-[9px] font-mono text-zinc-400 flex items-center gap-1">○ LOW</span>;
     }
   };
 
@@ -89,21 +92,21 @@ export const TasksPage: React.FC<TasksPageProps> = ({
 
   if (!isLoading && tasks.length === 0) {
     return (
-      <div className="panel p-12 rounded-2xl text-center space-y-4 border border-dashed border-zinc-800">
-        <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto text-2xl shadow">
+      <div className="panel p-12 rounded-2xl text-center space-y-4 border border-dashed border-border-subtle bg-surface-100">
+        <div className="w-16 h-16 rounded-2xl bg-surface-200 border border-border-subtle flex items-center justify-center mx-auto text-2xl shadow">
           🐗
         </div>
         <div className="space-y-1">
-          <h3 className="text-base font-bold text-white">В базе данных PostgreSQL пока нет задач</h3>
-          <p className="text-xs text-zinc-500 font-mono max-w-md mx-auto">
-            Таблица tasks в tasks_db (:5432) пуста. Создай первую задачу, и она мгновенно сохранится в базу данных.
+          <h3 className="text-base font-bold text-white">Список задач пуст</h3>
+          <p className="text-xs text-zinc-400 max-w-md mx-auto">
+            Сейчас нет активных дел. Создайте первую задачу, чтобы начать работу.
           </p>
         </div>
         <button
           onClick={onOpenCreateModal}
           className="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-bold transition shadow"
         >
-          + Создать первую задачу в БД
+          + Создать первую задачу
         </button>
       </div>
     );
@@ -112,11 +115,11 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   return (
     <div className="space-y-6">
       
-      {/* Urgent Alert Banner (Лаба по БД до 23:59) */}
+      {/* Urgent Alert Banner */}
       {urgentTask && (
-        <div className="p-4 rounded-xl panel border-l-4 border-l-accent-red flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-red-950/10">
+        <div className="p-4 rounded-xl panel border-l-4 border-l-accent-red flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-red-950/20">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-red-900/30 text-accent-red mt-0.5">
+            <div className="p-2 rounded-lg bg-red-900/40 text-accent-red mt-0.5">
               <Flame className="w-5 h-5 animate-pulse" />
             </div>
             <div>
@@ -124,20 +127,26 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 <span className="text-xs font-bold text-accent-red uppercase tracking-wider font-mono">
                   🔥 Горит дедлайн: сегодня до 23:59
                 </span>
-                <span className="text-[10px] font-mono text-zinc-400">Лаба №3 по Базам Данных</span>
+                <span className="text-[10px] font-mono text-zinc-300">Лаба по Базам Данных</span>
               </div>
-              <p className="text-xs text-zinc-300 mt-1 leading-snug">
-                {urgentTask.title} — если не сдать сегодня, научрук активирует режим отчисления.
+              <p className="text-xs text-zinc-200 mt-1 leading-snug">
+                {urgentTask.title} — {urgentTask.description || 'требуется срочная сдача научруку.'}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => onUpdateStatus(urgentTask.id, 'PROCESSING')}
-              className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow"
+              className="px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow"
             >
               <span>В работу</span>
               <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => onEditTask(urgentTask)}
+              className="px-3 py-1.5 rounded-lg bg-surface-200 hover:bg-surface-300 text-zinc-200 text-xs font-medium transition"
+            >
+              Детали
             </button>
           </div>
         </div>
@@ -148,13 +157,13 @@ export const TasksPage: React.FC<TasksPageProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           
           {/* Column: TODO */}
-          <div className="panel p-4 rounded-xl space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-[#1b1b22]">
-              <span className="text-xs font-bold text-zinc-400 flex items-center gap-2">
+          <div className="panel p-4 rounded-xl space-y-3 bg-surface-100">
+            <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
+              <span className="text-xs font-bold text-zinc-300 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-zinc-500" />
                 <span>В очереди (TODO)</span>
               </span>
-              <span className="text-xs font-mono text-zinc-500">
+              <span className="text-xs font-mono text-zinc-400">
                 {filteredTasks.filter(t => t.taskStatus === 'TODO').length}
               </span>
             </div>
@@ -165,11 +174,11 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 .map(t => (
                   <div
                     key={t.id}
+                    className="p-3.5 rounded-xl panel-inset hover:border-zinc-500 transition cursor-pointer space-y-2.5 group"
                     onClick={() => {
                       playTick();
                       onUpdateStatus(t.id, 'PROCESSING');
                     }}
-                    className="p-3.5 rounded-lg panel-inset hover:border-zinc-700 transition cursor-pointer space-y-2.5 group"
                   >
                     <div className="flex items-center justify-between">
                       {getTypeBadge(t.taskType)}
@@ -178,9 +187,20 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            onDeleteTask(t.id);
+                            playTick();
+                            onEditTask(t);
                           }}
-                          className="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-accent-red transition"
+                          className="p-1 rounded text-zinc-400 hover:text-white hover:bg-surface-200 transition"
+                          title="Редактировать задачу"
+                        >
+                          <Edit3 className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm('Удалить задачу?')) onDeleteTask(t.id);
+                          }}
+                          className="p-1 rounded text-zinc-500 hover:text-accent-red hover:bg-surface-200 transition"
                           title="Удалить задачу"
                         >
                           <Trash2 className="w-3 h-3" />
@@ -193,7 +213,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                         src={getTaskAvatar(t)}
                         alt="Владик"
                         className="w-7 h-7 rounded-md object-cover border border-zinc-700 shrink-0 mt-0.5 shadow"
-                        title="Ответственный кент"
+                        title="Ответственный"
                       />
                       <div className="text-xs font-semibold text-white leading-snug group-hover:text-accent-orange transition">
                         {t.title}
@@ -206,9 +226,9 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                       </p>
                     )}
 
-                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-1 border-t border-zinc-900">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pt-1.5 border-t border-border-subtle">
                       <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-zinc-600" />
+                        <Clock className="w-3 h-3 text-zinc-500" />
                         <span>До {t.deadline || 'дедлайна'}</span>
                       </span>
                       <span className="text-zinc-400 group-hover:text-white transition flex items-center gap-0.5">
@@ -220,7 +240,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 ))}
 
               {filteredTasks.filter(t => t.taskStatus === 'TODO').length === 0 && (
-                <div className="h-40 flex flex-col items-center justify-center text-center text-zinc-600 text-xs font-mono space-y-2 border border-dashed border-zinc-800 rounded-lg">
+                <div className="h-40 flex flex-col items-center justify-center text-center text-zinc-500 text-xs space-y-2 border border-dashed border-border-subtle rounded-xl">
                   <span>Очередь пуста</span>
                   <button
                     onClick={onOpenCreateModal}
@@ -234,13 +254,13 @@ export const TasksPage: React.FC<TasksPageProps> = ({
           </div>
 
           {/* Column: PROCESSING */}
-          <div className="panel p-4 rounded-xl space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-[#1b1b22]">
+          <div className="panel p-4 rounded-xl space-y-3 bg-surface-100">
+            <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
               <span className="text-xs font-bold text-accent-orange flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse" />
                 <span>В работе (PROCESSING)</span>
               </span>
-              <span className="text-xs font-mono text-zinc-500">
+              <span className="text-xs font-mono text-zinc-400">
                 {filteredTasks.filter(t => t.taskStatus === 'PROCESSING').length}
               </span>
             </div>
@@ -251,11 +271,11 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 .map(t => (
                   <div
                     key={t.id}
+                    className="p-3.5 rounded-xl panel-inset border-l-2 border-l-accent-orange hover:border-zinc-500 transition cursor-pointer space-y-2.5 group"
                     onClick={() => {
                       playTick();
                       onUpdateStatus(t.id, 'DONE');
                     }}
-                    className="p-3.5 rounded-lg panel-inset border-l-2 border-l-accent-orange hover:border-zinc-700 transition cursor-pointer space-y-2.5 group"
                   >
                     <div className="flex items-center justify-between">
                       {getTypeBadge(t.taskType)}
@@ -264,9 +284,20 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            onDeleteTask(t.id);
+                            playTick();
+                            onEditTask(t);
                           }}
-                          className="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-accent-red transition"
+                          className="p-1 rounded text-zinc-400 hover:text-white hover:bg-surface-200 transition"
+                          title="Редактировать задачу"
+                        >
+                          <Edit3 className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm('Удалить задачу?')) onDeleteTask(t.id);
+                          }}
+                          className="p-1 rounded text-zinc-500 hover:text-accent-red hover:bg-surface-200 transition"
                           title="Удалить задачу"
                         >
                           <Trash2 className="w-3 h-3" />
@@ -279,7 +310,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                         src={getTaskAvatar(t)}
                         alt="Владик"
                         className="w-7 h-7 rounded-md object-cover border border-zinc-700 shrink-0 mt-0.5 shadow"
-                        title="Ответственный кент"
+                        title="Ответственный"
                       />
                       <div className="text-xs font-semibold text-white leading-snug">
                         {t.title}
@@ -292,10 +323,10 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                       </p>
                     )}
 
-                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-1 border-t border-zinc-900">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 pt-1.5 border-t border-border-subtle">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3 text-accent-orange" />
-                        <span className="text-zinc-300">До {t.deadline || 'дедлайна'}</span>
+                        <span className="text-zinc-200">До {t.deadline || 'дедлайна'}</span>
                       </span>
                       <span className="text-accent-green group-hover:underline flex items-center gap-0.5">
                         <span>Готово ✓</span>
@@ -305,21 +336,21 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 ))}
 
               {filteredTasks.filter(t => t.taskStatus === 'PROCESSING').length === 0 && (
-                <div className="h-40 flex items-center justify-center text-center text-zinc-600 text-xs font-mono border border-dashed border-zinc-800 rounded-lg">
-                  Кабан отдыхает, задач в работе нет
+                <div className="h-40 flex items-center justify-center text-center text-zinc-500 text-xs border border-dashed border-border-subtle rounded-xl">
+                  Сейчас нет задач в работе
                 </div>
               )}
             </div>
           </div>
 
           {/* Column: DONE */}
-          <div className="panel p-4 rounded-xl space-y-3">
-            <div className="flex items-center justify-between pb-2 border-b border-[#1b1b22]">
+          <div className="panel p-4 rounded-xl space-y-3 bg-surface-100">
+            <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
               <span className="text-xs font-bold text-accent-green flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-accent-green" />
                 <span>Завершено (DONE)</span>
               </span>
-              <span className="text-xs font-mono text-zinc-500">
+              <span className="text-xs font-mono text-zinc-400">
                 {filteredTasks.filter(t => t.taskStatus === 'DONE').length}
               </span>
             </div>
@@ -330,11 +361,11 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 .map(t => (
                   <div
                     key={t.id}
+                    className="p-3.5 rounded-xl panel-inset opacity-80 hover:opacity-100 transition cursor-pointer space-y-2.5 group"
                     onClick={() => {
                       playTick();
                       onUpdateStatus(t.id, 'TODO');
                     }}
-                    className="p-3.5 rounded-lg panel-inset opacity-75 hover:opacity-100 transition cursor-pointer space-y-2.5 group"
                   >
                     <div className="flex items-center justify-between">
                       {getTypeBadge(t.taskType)}
@@ -343,9 +374,20 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            onDeleteTask(t.id);
+                            playTick();
+                            onEditTask(t);
                           }}
-                          className="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-accent-red transition"
+                          className="p-1 rounded text-zinc-400 hover:text-white hover:bg-surface-200 transition"
+                          title="Редактировать задачу"
+                        >
+                          <Edit3 className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (confirm('Удалить задачу?')) onDeleteTask(t.id);
+                          }}
+                          className="p-1 rounded text-zinc-500 hover:text-accent-red hover:bg-surface-200 transition"
                           title="Удалить"
                         >
                           <Trash2 className="w-3 h-3" />
@@ -364,15 +406,15 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-600 pt-1 border-t border-zinc-900">
-                      <span>Накрыта поляна 🍺</span>
-                      <span className="text-zinc-500 hover:text-white">Вернуть ↺</span>
+                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-1.5 border-t border-border-subtle">
+                      <span>Выполнено</span>
+                      <span className="text-zinc-400 hover:text-white">Вернуть ↺</span>
                     </div>
                   </div>
                 ))}
 
               {filteredTasks.filter(t => t.taskStatus === 'DONE').length === 0 && (
-                <div className="h-40 flex items-center justify-center text-center text-zinc-600 text-xs font-mono border border-dashed border-zinc-800 rounded-lg">
+                <div className="h-40 flex items-center justify-center text-center text-zinc-500 text-xs border border-dashed border-border-subtle rounded-xl">
                   Пока нет закрытых задач
                 </div>
               )}
@@ -382,23 +424,23 @@ export const TasksPage: React.FC<TasksPageProps> = ({
         </div>
       ) : (
         /* Linear List Table View */
-        <div className="panel rounded-xl overflow-hidden divide-y divide-[#1b1b22]">
-          <div className="grid grid-cols-12 px-4 py-2.5 text-[11px] font-mono text-zinc-500 uppercase bg-[#08080a]">
+        <div className="panel rounded-2xl overflow-hidden divide-y divide-border-subtle bg-surface-100">
+          <div className="grid grid-cols-12 px-4 py-3 text-[11px] font-mono text-zinc-400 uppercase bg-surface-50 font-semibold">
             <span className="col-span-1">Статус</span>
-            <span className="col-span-6">Название задачи</span>
+            <span className="col-span-5">Название задачи</span>
             <span className="col-span-2">Категория</span>
             <span className="col-span-1">Приоритет</span>
-            <span className="col-span-2 text-right">Дедлайн & Кент</span>
+            <span className="col-span-3 text-right">Дедлайн & Действия</span>
           </div>
 
           {filteredTasks.map(t => (
             <div
               key={t.id}
+              className="grid grid-cols-12 px-4 py-3.5 items-center text-xs hover:bg-surface-200/50 cursor-pointer transition group"
               onClick={() => {
                 playTick();
                 onUpdateStatus(t.id, getNextStatus(t.taskStatus));
               }}
-              className="grid grid-cols-12 px-4 py-3 items-center text-xs hover:bg-zinc-900/40 cursor-pointer transition group"
             >
               {/* Status */}
               <div className="col-span-1">
@@ -407,17 +449,17 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 ) : t.taskStatus === 'PROCESSING' ? (
                   <span className="w-3.5 h-3.5 rounded-full border-2 border-accent-orange border-t-transparent animate-spin inline-block" />
                 ) : (
-                  <span className="w-3.5 h-3.5 rounded-full border border-zinc-600 inline-block" />
+                  <span className="w-3.5 h-3.5 rounded-full border border-zinc-500 inline-block" />
                 )}
               </div>
 
               {/* Title & Desc */}
-              <div className="col-span-6 pr-4">
+              <div className="col-span-5 pr-4">
                 <span className={`font-semibold ${t.taskStatus === 'DONE' ? 'line-through text-zinc-500' : 'text-white'}`}>
                   {t.title}
                 </span>
                 {t.description && (
-                  <p className="text-[11px] text-zinc-500 truncate mt-0.5">
+                  <p className="text-[11px] text-zinc-400 truncate mt-0.5">
                     {t.description}
                   </p>
                 )}
@@ -433,8 +475,8 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 {getPriorityBadge(t.taskPriority)}
               </div>
 
-              {/* Deadline & Assignee */}
-              <div className="col-span-2 flex items-center justify-end gap-2.5 font-mono text-[11px] text-zinc-400">
+              {/* Deadline, Avatar & Actions */}
+              <div className="col-span-3 flex items-center justify-end gap-2.5 font-mono text-[11px] text-zinc-300">
                 <span>{t.deadline || '—'}</span>
                 <img
                   src={getTaskAvatar(t)}
@@ -444,9 +486,21 @@ export const TasksPage: React.FC<TasksPageProps> = ({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDeleteTask(t.id);
+                    playTick();
+                    onEditTask(t);
                   }}
-                  className="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-accent-red transition ml-1"
+                  className="p-1 rounded text-zinc-400 hover:text-white hover:bg-surface-200 transition"
+                  title="Редактировать"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (confirm('Удалить задачу?')) onDeleteTask(t.id);
+                  }}
+                  className="p-1 rounded text-zinc-500 hover:text-accent-red hover:bg-surface-200 transition"
+                  title="Удалить"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>

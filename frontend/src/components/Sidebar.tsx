@@ -56,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside className="w-64 bg-[#0a0a0d] border-r border-[#1b1b22] flex flex-col justify-between shrink-0 select-none h-screen sticky top-0">
+    <aside className="w-64 bg-surface-50 border-r border-border-subtle flex flex-col justify-between shrink-0 select-none h-screen sticky top-0">
       
       {/* Top Branding */}
       <div>
@@ -244,7 +244,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Bottom Status & Quick Sound Bites */}
-      <div className="p-3 border-t border-[#1b1b22] space-y-3 bg-[#08080a]">
+      <div className="p-3 border-t border-border-subtle space-y-3 bg-surface-50">
         
         {/* Quick Audio Controls */}
         <div className="grid grid-cols-2 gap-2">
@@ -273,17 +273,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* Backend Connectivity Status */}
-        <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 bg-[#0e0e12] p-2 rounded-lg border border-[#1b1b22]">
-          <div className="flex items-center gap-1.5">
-            <span className={`w-1.5 h-1.5 rounded-full ${backendStatus.task ? 'bg-accent-green' : 'bg-zinc-600'}`} />
-            <span>Task :8081</span>
+        {/* System Status */}
+        <div className="flex items-center justify-between text-[11px] font-medium text-zinc-400 bg-surface-200 px-3 py-2 rounded-lg border border-border-subtle">
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full ${backendStatus.task && backendStatus.scan ? 'bg-accent-green' : 'bg-accent-orange'}`} />
+            <span className="text-zinc-200 font-sans">
+              {backendStatus.task && backendStatus.scan ? 'Сервисы активны' : 'Синхронизация'}
+            </span>
           </div>
-          <span className="text-zinc-700">|</span>
-          <div className="flex items-center gap-1.5">
-            <span className={`w-1.5 h-1.5 rounded-full ${backendStatus.scan ? 'bg-accent-green' : 'bg-zinc-600'}`} />
-            <span>Scan :8083</span>
-          </div>
+          <span className="text-[10px] text-zinc-400 font-mono">v1.2</span>
         </div>
 
         {/* Vladik Interactive Pill */}

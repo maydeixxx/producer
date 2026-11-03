@@ -41,16 +41,15 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="panel p-5 rounded-2xl max-w-md w-full space-y-4 shadow-2xl border border-zinc-700 bg-[#0c0c10]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="panel p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl border border-border-subtle bg-surface-100">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#1b1b22]">
+        <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
           <h3 className="text-sm font-bold text-white flex items-center gap-2">
-            <span>Новая задача в ProducerOS</span>
-            <span className="badge bg-zinc-800 text-zinc-400 font-mono text-[9px]">:8081</span>
+            <span>Новая задача</span>
           </h3>
-          <button onClick={onClose} className="text-zinc-500 hover:text-white transition">
+          <button onClick={onClose} className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-surface-200 transition">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -58,36 +57,36 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-3.5">
           <div>
-            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Название задачи</label>
+            <label className="text-xs font-semibold text-zinc-300 block mb-1">Название задачи</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="например: Сдать лабу №3 по базам данных..."
-              className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-500 rounded-lg px-3 py-2 text-xs text-white focus:outline-none font-mono"
+              className="w-full bg-surface-200 border border-border-subtle focus:border-zinc-500 rounded-lg px-3.5 py-2 text-xs text-white focus:outline-none"
               autoFocus
               required
             />
           </div>
 
           <div>
-            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Описание (опционально)</label>
+            <label className="text-xs font-semibold text-zinc-300 block mb-1">Описание (опционально)</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Подробности, требования научрука или воронка эксперта..."
               rows={2}
-              className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-500 rounded-lg px-3 py-2 text-xs text-white focus:outline-none font-mono resize-none"
+              className="w-full bg-surface-200 border border-border-subtle focus:border-zinc-500 rounded-lg px-3.5 py-2 text-xs text-white focus:outline-none resize-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-mono text-zinc-400 block mb-1">Категория</label>
+              <label className="text-xs font-semibold text-zinc-300 block mb-1">Категория</label>
               <select
                 value={taskType}
                 onChange={(e) => setTaskType(e.target.value as TaskType)}
-                className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-500 rounded-lg px-3 py-2 text-xs text-zinc-200 focus:outline-none font-mono"
+                className="w-full bg-surface-200 border border-border-subtle focus:border-zinc-500 rounded-lg px-3 py-2 text-xs text-zinc-200 focus:outline-none font-medium"
               >
                 <option value="UNIVERSITY">🎓 Универ (UNIVERSITY)</option>
                 <option value="LAUNCH">💼 Запуск (LAUNCH)</option>
@@ -96,11 +95,11 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
             </div>
 
             <div>
-              <label className="text-[11px] font-mono text-zinc-400 block mb-1">Приоритет</label>
+              <label className="text-xs font-semibold text-zinc-300 block mb-1">Приоритет</label>
               <select
                 value={taskPriority}
                 onChange={(e) => setTaskPriority(e.target.value as TaskPriority)}
-                className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-500 rounded-lg px-3 py-2 text-xs text-zinc-200 focus:outline-none font-mono"
+                className="w-full bg-surface-200 border border-border-subtle focus:border-zinc-500 rounded-lg px-3 py-2 text-xs text-zinc-200 focus:outline-none font-medium"
               >
                 <option value="HIGH">🔥 Высокий (HIGH)</option>
                 <option value="MEDIUM">⚡ Средний (MEDIUM)</option>
@@ -110,12 +109,12 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
           </div>
 
           <div>
-            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Дедлайн</label>
+            <label className="text-xs font-semibold text-zinc-300 block mb-1">Дедлайн</label>
             <input
               type="date"
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
-              className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-500 rounded-lg px-3 py-2 text-xs text-zinc-200 focus:outline-none font-mono"
+              className="w-full bg-surface-200 border border-border-subtle focus:border-zinc-500 rounded-lg px-3.5 py-2 text-xs text-zinc-200 focus:outline-none font-mono"
             />
           </div>
 
@@ -129,7 +128,7 @@ export const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClos
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-lg bg-surface-100 hover:bg-surface-200 text-zinc-400 hover:text-white text-xs transition"
+              className="px-4 py-2.5 rounded-lg bg-surface-200 hover:bg-surface-300 text-zinc-300 text-xs font-medium transition"
             >
               Отмена
             </button>

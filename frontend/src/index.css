@@ -7,25 +7,25 @@
 }
 
 body {
-  background-color: #000000;
-  color: #ededed;
+  background-color: #121217;
+  color: #f2f2f7;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
 }
 
-/* Apple-style hairline panel */
+/* Apple-style refined slate panel */
 .panel {
-  background-color: #0c0c0f;
-  border: 1px solid #1c1c23;
+  background-color: #1b1b24;
+  border: 1px solid #2a2a38;
 }
 
 .panel:hover {
-  border-color: #2b2b36;
+  border-color: #3b3b4f;
 }
 
 .panel-inset {
-  background-color: #060608;
-  border: 1px solid #16161d;
+  background-color: #15151e;
+  border: 1px solid #242432;
 }
 
 /* Meme text styling with black outline */
@@ -47,23 +47,23 @@ body {
 }
 
 .demotivator-frame {
-  background: #000000;
-  border: 2px double #ffffff;
+  background: #14141a;
+  border: 2px double #e0e0ea;
   padding: 6px;
 }
 
 /* Custom Mac-style thin scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #22222a;
+  background: #2e2e3d;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #33333e;
+  background: #424256;
 }

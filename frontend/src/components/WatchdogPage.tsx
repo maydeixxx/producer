@@ -9,7 +9,7 @@ interface WatchdogPageProps {
 export const WatchdogPage: React.FC<WatchdogPageProps> = ({ onShowToast }) => {
   const handleTestDigest = () => {
     playTick();
-    onShowToast("Тестовый дайджест успешно отправлен в Telegram Bot!");
+    onShowToast("Тестовый дайджест успешно отправлен в Telegram!");
   };
 
   return (
@@ -18,12 +18,12 @@ export const WatchdogPage: React.FC<WatchdogPageProps> = ({ onShowToast }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         {/* Watchdog Status */}
-        <div className="panel p-5 rounded-2xl space-y-4 md:col-span-1">
-          <div className="flex items-center gap-3 pb-3 border-b border-[#1b1b22]">
+        <div className="panel p-5 rounded-2xl space-y-4 md:col-span-1 bg-surface-100">
+          <div className="flex items-center gap-3 pb-3 border-b border-border-subtle">
             <img src="/assets/vlad_2.jpg" alt="Швабра" className="w-10 h-10 rounded-lg object-cover border border-zinc-700 shadow" />
             <div>
               <h2 className="text-sm font-bold text-white">Швабра-Сторож</h2>
-              <p className="text-[10px] text-zinc-500 font-mono">Telegram Watchdog Bot</p>
+              <p className="text-xs text-zinc-400">Telegram Уведомления</p>
             </div>
           </div>
 
@@ -46,7 +46,7 @@ export const WatchdogPage: React.FC<WatchdogPageProps> = ({ onShowToast }) => {
             </div>
           </div>
 
-          <div className="pt-3 border-t border-[#1b1b22] space-y-2">
+          <div className="pt-3 border-t border-border-subtle space-y-2">
             <button
               onClick={handleTestDigest}
               className="w-full py-2.5 rounded-lg bg-white hover:bg-zinc-200 text-black text-xs font-bold transition shadow flex items-center justify-center gap-2"
@@ -56,7 +56,7 @@ export const WatchdogPage: React.FC<WatchdogPageProps> = ({ onShowToast }) => {
             </button>
             <button
               onClick={triggerKlaxon}
-              className="w-full py-2 rounded-lg bg-surface-100 hover:bg-surface-200 text-zinc-300 text-xs font-mono transition border border-border-subtle flex items-center justify-center gap-2"
+              className="w-full py-2 rounded-lg bg-surface-200 hover:bg-surface-300 text-zinc-300 text-xs font-mono transition border border-border-subtle flex items-center justify-center gap-2"
             >
               <Volume2 className="w-3.5 h-3.5 text-accent-orange" />
               <span>Проверить боевой клаксон</span>
@@ -65,10 +65,10 @@ export const WatchdogPage: React.FC<WatchdogPageProps> = ({ onShowToast }) => {
         </div>
 
         {/* Telegram Template Preview */}
-        <div className="panel p-5 rounded-2xl space-y-3 md:col-span-2">
-          <div className="flex items-center justify-between pb-2 border-b border-[#1b1b22]">
-            <span className="text-xs font-semibold text-white">Шаблон сообщения Telegram Bot API (HTML)</span>
-            <span className="text-[10px] font-mono text-zinc-500">Consumer: NotificationService</span>
+        <div className="panel p-5 rounded-2xl space-y-3 md:col-span-2 bg-surface-100">
+          <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
+            <span className="text-xs font-semibold text-white">Шаблон сообщения Telegram Bot</span>
+            <span className="text-[10px] font-mono text-zinc-400">Автоматический дайджест</span>
           </div>
 
           <div className="panel-inset p-4 rounded-xl font-mono text-xs text-zinc-300 space-y-3 leading-relaxed">
@@ -86,7 +86,7 @@ export const WatchdogPage: React.FC<WatchdogPageProps> = ({ onShowToast }) => {
               • [Запуск] Прогрев для курса «Кабан ебаный» (висит 4 дня)<br />
               • [Личное] Сэр похмелье: восстановить водно-солевой баланс (висит 3 дня)
             </div>
-            <div className="text-zinc-500 italic pt-2 border-t border-zinc-900">
+            <div className="text-zinc-400 italic pt-2 border-t border-border-subtle">
               «БРАТАН, У ТЕБЯ ЗАДАЧА ПРОСТАИВАЕТ, ДАВАЙ ИСПРАВЛЯЙ! Хорошего и продуктивного дня! 🚀»
             </div>
           </div>

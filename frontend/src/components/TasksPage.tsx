@@ -19,6 +19,7 @@ interface TasksPageProps {
   onEditTask: (task: Task) => void;
   onDeleteTask: (id: string) => void;
   onOpenCreateModal: () => void;
+  onClearSearch?: () => void;
   isLoading?: boolean;
 }
 
@@ -31,6 +32,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   onEditTask,
   onDeleteTask,
   onOpenCreateModal,
+  onClearSearch,
   isLoading
 }) => {
   // Filter logic
@@ -91,6 +93,30 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   const urgentTask = tasks.find(t => t.taskPriority === 'HIGH' && t.taskType === 'UNIVERSITY' && t.taskStatus !== 'DONE');
 
   if (!isLoading && tasks.length === 0) {
+    if (searchQuery.trim()) {
+      return (
+        <div className="panel p-12 rounded-2xl text-center space-y-4 border border-dashed border-border-subtle bg-surface-100">
+          <div className="w-16 h-16 rounded-2xl bg-surface-200 border border-border-subtle flex items-center justify-center mx-auto text-2xl shadow">
+            🔍
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-white">Задачи не найдены</h3>
+            <p className="text-xs text-zinc-300 max-w-md mx-auto">
+              По запросу «<span className="text-accent-orange font-semibold">{searchQuery}</span>» на бэкенде ничего не найдено.
+            </p>
+          </div>
+          {onClearSearch && (
+            <button
+              onClick={onClearSearch}
+              className="px-4 py-2 rounded-lg bg-surface-200 hover:bg-surface-300 border border-border-subtle text-white text-xs font-semibold transition shadow"
+            >
+              Сбросить поиск
+            </button>
+          )}
+        </div>
+      );
+    }
+
     return (
       <div className="panel p-12 rounded-2xl text-center space-y-4 border border-dashed border-border-subtle bg-surface-100">
         <div className="w-16 h-16 rounded-2xl bg-surface-200 border border-border-subtle flex items-center justify-center mx-auto text-2xl shadow">

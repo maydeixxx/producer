@@ -14,16 +14,16 @@ export default {
       },
       colors: {
         surface: {
-          0: '#000000',
-          50: '#08080a',
-          100: '#0f0f13',
-          200: '#17171d',
-          300: '#212129'
+          0: '#121217',
+          50: '#181820',
+          100: '#1f1f29',
+          200: '#272734',
+          300: '#323242'
         },
         border: {
-          subtle: '#1d1d24',
-          hover: '#2a2a35',
-          strong: '#3c3c4a'
+          subtle: '#2c2c3b',
+          hover: '#3f3f52',
+          strong: '#54546d'
         },
         accent: {
           orange: '#ff9f0a',

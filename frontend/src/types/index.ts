@@ -14,6 +14,8 @@ export interface Task {
 }
 
 export interface ExpertData {
+  id?: string;
+  expertLink?: string;
   nickname: string;
   coverage: number;
   targetAud: string;

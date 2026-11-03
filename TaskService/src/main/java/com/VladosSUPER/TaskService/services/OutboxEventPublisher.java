@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -48,20 +49,20 @@ public class OutboxEventPublisher {
                     LocalDateTime now = LocalDateTime.now();
                     LocalDateTime lastActivityAt = eventModel.lastActivityAt();
                     long daysBetweenLastActivityAndNow = ChronoUnit.DAYS.between(lastActivityAt, now);
-                    long daysBetweenNowAndDeadline = ChronoUnit.DAYS.between(eventModel.deadline(), LocalDateTime.now());
-
+                    long daysUntilDeadline = ChronoUnit.DAYS.between(LocalDate.now(), eventModel.deadline());
+                    boolean isDeadlineUrgent = daysUntilDeadline <= 2;
 
                     switch (event.getTaskPriority()) {
                         case LOW -> {
-                            if (daysBetweenLastActivityAndNow >= 3 || daysBetweenNowAndDeadline <= 1)
+                            if (daysBetweenLastActivityAndNow >= 3 || isDeadlineUrgent)
                                 taskEventModelKafkaTemplate.send(tasksTopic, event.getTaskId(), eventModel);
                         }
                         case HIGH -> {
-                            if (daysBetweenLastActivityAndNow >= 1 || daysBetweenNowAndDeadline <= 1)
+                            if (daysBetweenLastActivityAndNow >= 1 || isDeadlineUrgent)
                                 taskEventModelKafkaTemplate.send(tasksTopic, event.getTaskId(), eventModel);
                         }
                         case MEDIUM -> {
-                            if (daysBetweenLastActivityAndNow >= 2 || daysBetweenNowAndDeadline <= 1)
+                            if (daysBetweenLastActivityAndNow >= 2 || isDeadlineUrgent)
                                 taskEventModelKafkaTemplate.send(tasksTopic, event.getTaskId(), eventModel);
                         }
                     }

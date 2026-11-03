@@ -42,15 +42,19 @@ export const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoadingTasks, setIsLoadingTasks] = useState<boolean>(true);
 
-  // Fetch real tasks from TaskService (:8081)
-  const fetchTasks = async () => {
+  // Fetch real tasks from TaskService (:8081) with backend title search
+  const fetchTasks = async (query?: string) => {
     try {
-      const res = await fetch(TASK_API);
+      const q = query !== undefined ? query.trim() : searchQuery.trim();
+      const url = q ? `${TASK_API}/title?title=${encodeURIComponent(q)}` : TASK_API;
+      const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
           setTasks(data);
         }
+      } else if (res.status === 404 || res.status === 400) {
+        setTasks([]);
       }
     } catch {
       // Backend offline
@@ -81,15 +85,27 @@ export const App: React.FC = () => {
     setBackendStatus({ task: taskOk, scan: scanOk });
   };
 
+  // Debounced search for tasks by title
+  useEffect(() => {
+    if (currentTab === 'tasks') {
+      const timer = setTimeout(() => {
+        fetchTasks(searchQuery);
+      }, 250);
+      return () => clearTimeout(timer);
+    }
+  }, [searchQuery, currentTab]);
+
   useEffect(() => {
     fetchTasks();
     checkHealth();
     const interval = setInterval(() => {
       checkHealth();
-      fetchTasks();
+      if (currentTab !== 'tasks' || !searchQuery.trim()) {
+        fetchTasks();
+      }
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [searchQuery, currentTab]);
 
   // Update task status with meme reactions & real DB sync
   const handleUpdateStatus = async (taskId: string, newStatus: Task['taskStatus']) => {
@@ -333,6 +349,7 @@ export const App: React.FC = () => {
           setSearchQuery={setSearchQuery}
           onOpenCreateModal={() => setIsCreateModalOpen(true)}
           onQuickMeme={handleQuickMeme}
+          currentTab={currentTab}
         />
 
         {/* Tab Views */}
@@ -350,6 +367,7 @@ export const App: React.FC = () => {
               }}
               onDeleteTask={handleDeleteTask}
               onOpenCreateModal={() => setIsCreateModalOpen(true)}
+              onClearSearch={() => setSearchQuery('')}
               isLoading={isLoadingTasks}
             />
           )}
@@ -378,6 +396,8 @@ export const App: React.FC = () => {
                 setCurrentTab('tasks');
               }}
               onShowReaction={(img, title, quote) => setReactionToast({ img, title, quote })}
+              externalSearchQuery={currentTab === 'scout' ? searchQuery : ''}
+              onClearExternalSearch={() => setSearchQuery('')}
             />
           )}
 

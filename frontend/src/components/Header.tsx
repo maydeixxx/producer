@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Plus, LayoutGrid, ListFilter, Sparkles } from 'lucide-react';
+import { Search, Plus, LayoutGrid, ListFilter, Sparkles, X } from 'lucide-react';
 import { playTick } from './AudioSynthesizer';
 
 interface HeaderProps {
@@ -12,6 +12,8 @@ interface HeaderProps {
   setSearchQuery: (q: string) => void;
   onOpenCreateModal?: () => void;
   onQuickMeme?: () => void;
+  currentTab?: string;
+  onSearchSubmit?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -23,8 +25,23 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery,
   setSearchQuery,
   onOpenCreateModal,
-  onQuickMeme
+  onQuickMeme,
+  currentTab = 'tasks',
+  onSearchSubmit
 }) => {
+  const getSearchPlaceholder = () => {
+    if (currentTab === 'tasks') return 'Поиск задач по названию (:8081)...';
+    if (currentTab === 'scout') return 'Поиск эксперта по нику (:8083)...';
+    return 'Поиск по задачам и проектам (⌘K)...';
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && onSearchSubmit) {
+      e.preventDefault();
+      onSearchSubmit();
+    }
+  };
+
   return (
     <header className="h-16 border-b-2 border-border-strong bg-surface-0/95 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30 select-none shadow-sm">
       
@@ -45,52 +62,67 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* Center Search Bar */}
+      {/* Center Search Bar with Backend Integration */}
       <div className="relative w-64 md:w-80 hidden sm:block">
-        <Search className="w-3.5 h-3.5 text-zinc-300 absolute left-3 top-1/2 -translate-y-1/2" />
+        <Search className="w-3.5 h-3.5 text-zinc-300 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Поиск по задачам и проектам (⌘K)..."
-          className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-300 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-zinc-400 focus:outline-none transition"
+          onKeyDown={handleKeyDown}
+          placeholder={getSearchPlaceholder()}
+          className="w-full bg-surface-100 border border-border-subtle focus:border-zinc-300 rounded-lg pl-8 pr-8 py-1.5 text-xs text-white placeholder-zinc-400 focus:outline-none transition"
         />
+        {searchQuery.trim() && (
+          <button
+            onClick={() => {
+              playTick();
+              setSearchQuery('');
+            }}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-zinc-400 hover:text-white transition"
+            title="Очистить поиск"
+          >
+            <X className="w-3 h-3" />
+          </button>
+        )}
       </div>
 
       {/* Right Controls */}
       <div className="flex items-center gap-2.5">
         
         {/* Kanban vs List Switcher */}
-        <div className="flex items-center bg-surface-100 p-0.5 rounded-lg border border-border-subtle">
-          <button
-            onClick={() => {
-              playTick();
-              setViewMode('kanban');
-            }}
-            className={`p-1.5 rounded-md text-xs transition ${
-              viewMode === 'kanban'
-                ? 'bg-surface-300 text-white shadow-sm'
-                : 'text-zinc-300 hover:text-white'
-            }`}
-            title="Канбан-доска"
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={() => {
-              playTick();
-              setViewMode('list');
-            }}
-            className={`p-1.5 rounded-md text-xs transition ${
-              viewMode === 'list'
-                ? 'bg-surface-300 text-white shadow-sm'
-                : 'text-zinc-300 hover:text-white'
-            }`}
-            title="Линейный список"
-          >
-            <ListFilter className="w-3.5 h-3.5" />
-          </button>
-        </div>
+        {currentTab === 'tasks' && (
+          <div className="flex items-center bg-surface-100 p-0.5 rounded-lg border border-border-subtle">
+            <button
+              onClick={() => {
+                playTick();
+                setViewMode('kanban');
+              }}
+              className={`p-1.5 rounded-md text-xs transition ${
+                viewMode === 'kanban'
+                  ? 'bg-surface-300 text-white shadow-sm'
+                  : 'text-zinc-300 hover:text-white'
+              }`}
+              title="Канбан-доска"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => {
+                playTick();
+                setViewMode('list');
+              }}
+              className={`p-1.5 rounded-md text-xs transition ${
+                viewMode === 'list'
+                  ? 'bg-surface-300 text-white shadow-sm'
+                  : 'text-zinc-300 hover:text-white'
+              }`}
+              title="Линейный список"
+            >
+              <ListFilter className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
 
         {/* Quick Meme Button */}
         {onQuickMeme && (

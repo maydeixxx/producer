@@ -39,11 +39,11 @@ export const MemesPage: React.FC<MemesPageProps> = ({ onOpenInStudio, onShowReac
           <div className="flex items-center gap-2">
             <h2 className="text-base font-extrabold text-white">Мемный Зал Славы Владика</h2>
             <span className="badge bg-accent-orange text-black font-mono font-bold text-[10px]">
-              12/12 МЕМОВ
+              {CURATED_MEMES.length} МЕМОВ
             </span>
           </div>
-          <p className="text-xs text-zinc-400 mt-1 max-w-xl">
-            Все 12 фотографий твоего кента, упакованные в классические демотиваторы и Impact-форматы. Кликай на звук, лайкай и открывай в мемогенераторе.
+          <p className="text-xs text-zinc-300 mt-1 max-w-xl">
+            Все {CURATED_MEMES.length} фотографий твоего кента, упакованные в классические демотиваторы и Impact-форматы. Кликай на звук, лайкай и открывай в мемогенераторе.
           </p>
         </div>
 
@@ -51,9 +51,9 @@ export const MemesPage: React.FC<MemesPageProps> = ({ onOpenInStudio, onShowReac
         <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-mono">
           <button
             onClick={() => { playTick(); setCategoryFilter('ALL'); }}
-            className={`px-3 py-1.5 rounded-lg transition ${categoryFilter === 'ALL' ? 'bg-zinc-800 text-white font-semibold' : 'text-zinc-400 hover:text-white bg-surface-100'}`}
+            className={`px-3 py-1.5 rounded-lg transition ${categoryFilter === 'ALL' ? 'bg-surface-300 text-white font-semibold' : 'text-zinc-300 hover:text-white bg-surface-100'}`}
           >
-            Все (12)
+            Все ({CURATED_MEMES.length})
           </button>
           <button
             onClick={() => { playTick(); setCategoryFilter('kaban'); }}

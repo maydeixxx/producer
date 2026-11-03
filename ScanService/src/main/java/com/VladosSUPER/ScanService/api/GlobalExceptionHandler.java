@@ -1,7 +1,9 @@
 package com.VladosSUPER.ScanService.api;
 
 import com.VladosSUPER.ScanService.models.dtos.ErrorResponseDto;
+import com.VladosSUPER.ScanService.models.exceptions.ExpertNotFoundException;
 import com.VladosSUPER.ScanService.models.exceptions.InstagramParsingException;
+import com.VladosSUPER.ScanService.models.exceptions.UpdateStrategyNotFound;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleDefaultException(Exception ex, WebRequest request) {
         log.error("Internal server error: ", ex);
         ErrorResponseDto errorResponse = buildErrorResponse("Internal server error", ex.getMessage(), 500, request);
+        return ResponseEntity.status(errorResponse.code()).body(errorResponse);
+    }
+
+    @ExceptionHandler(ExpertNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleExpertNotFoundException(ExpertNotFoundException ex, WebRequest request) {
+        log.error("Expert not found: ", ex);
+        ErrorResponseDto errorResponse = buildErrorResponse("Expert not found", ex.getMessage(), 404, request);
+        return ResponseEntity.status(errorResponse.code()).body(errorResponse);
+    }
+
+    @ExceptionHandler(UpdateStrategyNotFound.class)
+    public ResponseEntity<ErrorResponseDto> handleUpdateStrategyNotFound(UpdateStrategyNotFound ex, WebRequest request) {
+        log.error("Strategy not found: ", ex);
+        ErrorResponseDto errorResponse = buildErrorResponse("Strategy not found", ex.getMessage(), 404, request);
         return ResponseEntity.status(errorResponse.code()).body(errorResponse);
     }
 

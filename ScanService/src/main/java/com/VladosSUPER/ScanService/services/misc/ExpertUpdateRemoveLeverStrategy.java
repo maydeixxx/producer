@@ -14,6 +14,6 @@ public class ExpertUpdateRemoveLeverStrategy implements ExpertUpdateStrategy {
 
     @Override
     public void update(ExpertUpdateDto dto, ExpertDomain domain) {
-        domain.removeLever(dto.lever());
+        domain.removeLever(dto.lever().toLowerCase());
     }
 }

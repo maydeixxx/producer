@@ -68,7 +68,8 @@ public class OutboxEventPublisher {
                     }
 
                     log.info("New message sent. Task - {}", event.getTaskId());
-                    event.setStatus(OutboxStatus.NEW);
+                    event.setStatus(OutboxStatus.PROCESSED);
+                    event.setProcessedAt(LocalDateTime.now());
                 } catch (Exception e) {
                     log.error("Error sending new event: ", e);
 
@@ -97,5 +98,10 @@ public class OutboxEventPublisher {
             }
             return outboxEvents;
         });
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteOldEvents() {
+        transactionTemplate.executeWithoutResult(s -> outboxRepository.deleteOldEvents());
     }
 }

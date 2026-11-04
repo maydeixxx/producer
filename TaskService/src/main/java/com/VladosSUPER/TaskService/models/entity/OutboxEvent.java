@@ -29,6 +29,8 @@ public class OutboxEvent {
     @Column(nullable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)
+    private LocalDateTime processedAt;
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private OutboxStatus status;
 

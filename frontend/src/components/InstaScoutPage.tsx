@@ -13,7 +13,7 @@ interface InstaScoutPageProps {
   onSelectExpert?: (expert: ExpertData | null) => void;
 }
 
-const SCAN_API = "http://localhost:8083/api/v1/expert";
+const SCAN_API = import.meta.env.VITE_SCAN_API || "http://localhost:8083/api/v1/expert";
 
 export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({ 
   onTaskCreatedFromScout, 

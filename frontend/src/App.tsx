@@ -18,8 +18,8 @@ import {
   playTick 
 } from './components/AudioSynthesizer';
 
-const TASK_API = "http://localhost:8081/api/v1/tasks";
-const SCAN_API = "http://localhost:8083/api/v1/expert";
+const TASK_API = import.meta.env.VITE_TASK_API || "http://localhost:8081/api/v1/tasks";
+const SCAN_API = import.meta.env.VITE_SCAN_API || "http://localhost:8083/api/v1/expert";
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<string>('tasks');

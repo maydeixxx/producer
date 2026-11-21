@@ -12,40 +12,40 @@ export default {
         meme: ['"Oswald"', 'Impact', 'sans-serif']
       },
       colors: {
-        // Figma Warm Chocolate & Graphite lighter palette
+        // Notion Dark Clean Palette
         surface: {
-          0: '#7e6263',    // Main canvas: warm chocolate / cocoa (Figma RGB 126, 98, 99)
-          50: '#524646',   // Sidebar: dark graphite-chocolate (Figma RGB 82, 70, 70)
-          100: '#695152',  // Cards & Panels: rich chocolate
-          200: '#574243',  // Inset fields & soft hover: warm cocoa
-          300: '#463536'   // Active buttons & selected items
+          0: '#191919',    // Main Notion Canvas
+          50: '#202020',   // Notion Sidebar
+          100: '#252525',  // Notion Cards & Table Rows
+          200: '#2e2e2e',  // Notion Inset & Hover
+          300: '#383838'   // Notion Active
         },
         border: {
-          subtle: '#614d4e', // Hairline borders
-          hover: '#453536',  // Hover states
-          strong: '#1f1818'  // Deep graphite divider line (matches Figma)
+          subtle: '#2e2e2e', // Clean 1px border
+          hover: '#3f3f3f',  // Hover states
+          strong: '#262626'  // Dividers
         },
-        // Warm calibrated text ramp for high contrast against chocolate tones
+        // Notion Neutral Text Ramp
         zinc: {
           100: '#ffffff',
-          200: '#f8f4f2',
-          300: '#ebdcd7',
-          400: '#d9c6bf',
-          500: '#bfaba4',
-          600: '#99857e',
-          700: '#6d5a55',
-          800: '#4a3a36',
-          900: '#302422',
-          950: '#1e1615',
+          200: '#f0f0f0',
+          300: '#e6e6e6',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
+          950: '#0a0a0a',
         },
         accent: {
-          orange: '#ff9d42', // Warm caramel
-          honey: '#fbbf24',  // Honey amber
-          red: '#f87171',    // Coral deadline alert
-          green: '#34d399',  // Sage green
-          blue: '#60a5fa',   // Sky accent
-          purple: '#c084fc', // Lilac
-          yellow: '#fbbf24'  // Gold
+          orange: '#ea580c', // Notion Orange
+          honey: '#f59e0b',  // Notion Amber
+          red: '#ef4444',    // Notion Red
+          green: '#10b981',  // Notion Green
+          blue: '#3b82f6',   // Notion Blue
+          purple: '#a855f7', // Notion Purple
+          yellow: '#eab308'  // Notion Yellow
         }
       }
     },

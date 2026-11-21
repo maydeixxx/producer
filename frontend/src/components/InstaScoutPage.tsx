@@ -13,7 +13,7 @@ interface InstaScoutPageProps {
   onSelectExpert?: (expert: ExpertData | null) => void;
 }
 
-const SCAN_API = import.meta.env.VITE_SCAN_API || "http://localhost:8083/api/v1/expert";
+const SCAN_API = import.meta.env.VITE_SCAN_API || "https://scan-service-production.up.railway.app/api/v1/expert";
 
 export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({ 
   onTaskCreatedFromScout, 
@@ -133,7 +133,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
         alert(`Ошибка при поиске эксперта: код ${res.status}`);
       }
     } catch {
-      alert('Сервис ScanService (:8083) недоступен. Проверьте подключение.');
+      alert('Сервис временно недоступен. Проверьте подключение.');
     } finally {
       setIsSearchingNickname(false);
     }
@@ -234,9 +234,6 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
         <div>
           <h2 className="text-base font-bold text-white flex items-center gap-2">
             <span>InstaScout AI</span>
-            <span className="badge bg-blue-950/40 text-accent-blue border border-blue-900/50 text-[10px]">
-              Бэкенд :8083
-            </span>
           </h2>
           <p className="text-xs text-zinc-300 mt-0.5">
             Поиск экспертов по никнейму, парсинг Instagram и глубокий анализ целевой аудитории
@@ -385,7 +382,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
                     className="p-2 rounded-lg hover:bg-surface-200 cursor-pointer transition text-xs text-accent-blue font-semibold flex items-center gap-2 border-t border-border-subtle mt-1"
                   >
                     <Search className="w-3.5 h-3.5" />
-                    <span>Искать на сервере «@{cleanNickQuery}» (:8083)</span>
+                    <span>Найти «@{cleanNickQuery}»</span>
                   </div>
 
                 </div>
@@ -431,7 +428,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
             <div className="flex items-center gap-2.5 text-orange-200">
               <AlertCircle className="w-4 h-4 text-accent-orange shrink-0" />
               <span>
-                Эксперт <strong>@{nicknameNotFound}</strong> не найден в базе данных ScanService.
+                Эксперт <strong>@{nicknameNotFound}</strong> пока не сохранен.
               </span>
             </div>
             <button
@@ -563,7 +560,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
               </h3>
               <p className="text-xs text-zinc-300 max-w-md mx-auto">
                 {cleanFilter
-                  ? 'Вы можете выполнить прямой запрос к бэкенду или спарсить новый профиль.'
+                  ? 'Вы можете выполнить поиск или спарсить новый профиль.'
                   : 'Введите никнейм для поиска или ссылку на Instagram выше.'}
               </p>
               {cleanFilter && (
@@ -571,7 +568,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
                   onClick={() => handleSearchByNickname(cleanFilter)}
                   className="px-4 py-2 rounded-xl bg-surface-200 hover:bg-surface-300 border border-border-subtle text-white text-xs font-semibold transition"
                 >
-                  Искать «@{cleanFilter}» на бэкенде (:8083)
+                  Найти «@{cleanFilter}»
                 </button>
               )}
             </div>

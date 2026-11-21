@@ -238,7 +238,7 @@ export const Header: React.FC<HeaderProps> = ({
             {!hasSuggestions && (
               <div className="p-3 text-center text-xs text-zinc-300 space-y-1">
                 <div>Ничего не найдено по запросу «<span className="text-accent-orange font-semibold">{searchQuery}</span>»</div>
-                <div className="text-[10px] text-zinc-400">Нажмите Enter для отправки запроса на бэкенд</div>
+                <div className="text-[10px] text-zinc-400">Нажмите Enter для поиска</div>
               </div>
             )}
 

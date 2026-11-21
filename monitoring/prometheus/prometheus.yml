@@ -1,0 +1,42 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  # Railway Production TaskService
+  - job_name: 'task-service-railway'
+    metrics_path: '/actuator/prometheus'
+    scheme: https
+    static_configs:
+      - targets: ['task-service-production-8fef6048.up.railway.app:443']
+        labels:
+          application: 'TaskService'
+          env: 'railway-production'
+
+  # Railway Production ScanService
+  - job_name: 'scan-service-railway'
+    metrics_path: '/actuator/prometheus'
+    scheme: https
+    static_configs:
+      - targets: ['scan-service-production.up.railway.app:443']
+        labels:
+          application: 'ScanService'
+          env: 'railway-production'
+
+  # Local TaskService (when running locally)
+  - job_name: 'task-service-local'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:8081']
+        labels:
+          application: 'TaskService'
+          env: 'local'
+
+  # Local ScanService (when running locally)
+  - job_name: 'scan-service-local'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:8083']
+        labels:
+          application: 'ScanService'
+          env: 'local'

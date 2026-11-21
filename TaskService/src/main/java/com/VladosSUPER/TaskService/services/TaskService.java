@@ -14,6 +14,10 @@ import com.VladosSUPER.TaskService.services.interfaces.OutboxRepository;
 import com.VladosSUPER.TaskService.services.interfaces.TaskRepository;
 import com.VladosSUPER.TaskService.services.interfaces.TaskUpdateStrategy;
 import com.VladosSUPER.TaskService.services.misc.TaskMapper;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.tracing.ScopedSpan;
+import io.micrometer.tracing.Tracer;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -31,13 +35,17 @@ public class TaskService {
     private final Map<String, TaskUpdateStrategy> updateStrategyMap;
     private final OutboxRepository outboxRepository;
     private final ObjectMapper objectMapper;
+    private final MeterRegistry registry;
+    private final Tracer tracer;
 
-    public TaskService(TaskRepository taskRepository, TaskMapper taskMapper, List<TaskUpdateStrategy> strategies, OutboxRepository outboxRepository, ObjectMapper objectMapper) {
+    public TaskService(TaskRepository taskRepository, TaskMapper taskMapper, List<TaskUpdateStrategy> strategies, OutboxRepository outboxRepository, ObjectMapper objectMapper, MeterRegistry registry, Tracer tracer) {
         this.taskRepository = taskRepository;
         this.taskMapper = taskMapper;
         this.updateStrategyMap = new HashMap<>();
         this.outboxRepository = outboxRepository;
         this.objectMapper = objectMapper;
+        this.tracer = tracer;
+        this.registry = registry;
 
         for (TaskUpdateStrategy strategy : strategies) {
             updateStrategyMap.putIfAbsent(strategy.getType(), strategy);
@@ -51,37 +59,55 @@ public class TaskService {
      */
     @Transactional
     public void createTask(CreateTaskDTO dto) {
-        TaskDomain newTask = TaskDomain.createTask(
-                dto.taskType(),
-                dto.taskPriority(),
-                dto.title(),
-                dto.description(),
-                dto.deadline()
-        );
+        ScopedSpan createTransactionSpan = tracer.startScopedSpan("create-transaction-span");
+        Timer.Sample start = Timer.start(registry);
 
-        TaskEventModel eventModel = new TaskEventModel(
-                newTask.getId().id(),
-                newTask.getTitle(),
-                newTask.getDescription(),
-                newTask.getTaskPriority(),
-                newTask.getTaskStatus(),
-                newTask.getTaskType(),
-                newTask.getDeadline(),
-                newTask.getCreatedAt(),
-                newTask.getLastActivityAt()
-        );
+        try {
+            TaskDomain newTask = TaskDomain.createTask(
+                    dto.taskType(),
+                    dto.taskPriority(),
+                    dto.title(),
+                    dto.description(),
+                    dto.deadline()
+            );
 
-        OutboxEvent outboxEvent = OutboxEvent.builder()
-                .taskId(newTask.getId().id())
-                .payload(objectMapper.writeValueAsString(eventModel))
-                .createdAt(LocalDateTime.now())
-                .status(OutboxStatus.NEW)
-                .taskPriority(eventModel.taskPriority())
-                .retries(0)
-                .build();
+            TaskEventModel eventModel = new TaskEventModel(
+                    newTask.getId().id(),
+                    newTask.getTitle(),
+                    newTask.getDescription(),
+                    newTask.getTaskPriority(),
+                    newTask.getTaskStatus(),
+                    newTask.getTaskType(),
+                    newTask.getDeadline(),
+                    newTask.getCreatedAt(),
+                    newTask.getLastActivityAt()
+            );
 
-        outboxRepository.save(outboxEvent);
-        taskRepository.save(taskMapper.domainToEntity(newTask));
+            OutboxEvent outboxEvent = OutboxEvent.builder()
+                    .taskId(newTask.getId().id())
+                    .payload(objectMapper.writeValueAsString(eventModel))
+                    .createdAt(LocalDateTime.now())
+                    .status(OutboxStatus.NEW)
+                    .taskPriority(eventModel.taskPriority())
+                    .retries(0)
+                    .build();
+
+            outboxRepository.save(outboxEvent);
+            taskRepository.save(taskMapper.domainToEntity(newTask));
+
+            createTransactionSpan.tag("status", "successful");
+            registry.counter("task.create", "status", "successful").increment();
+        } catch (Exception e) {
+            createTransactionSpan.tag("status", "failed");
+            createTransactionSpan.tag("error.message", e.getMessage());
+            createTransactionSpan.error(e);
+            registry.counter("task.create", "status", "failed").increment();
+
+            throw new RuntimeException(e);
+        } finally {
+            createTransactionSpan.end();
+            start.stop(registry.timer("task.creation.duration"));
+        }
     }
 
     /**

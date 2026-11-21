@@ -12,6 +12,10 @@ import com.VladosSUPER.ScanService.models.exceptions.UpdateStrategyNotFound;
 import com.VladosSUPER.ScanService.services.interfaces.ExpertRepository;
 import com.VladosSUPER.ScanService.services.interfaces.ExpertUpdateStrategy;
 import com.VladosSUPER.ScanService.services.misc.ExpertMapper;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.tracing.ScopedSpan;
+import io.micrometer.tracing.Tracer;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +40,8 @@ public class ExpertService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final Map<String, ExpertUpdateStrategy> updateStrategyMap;
+    private final MeterRegistry registry;
+    private final Tracer tracer;
 
     @Value("${ai.api-key}")
     private String apiKey;
@@ -47,12 +53,14 @@ public class ExpertService {
     private String scraperToken;
 
 
-    public ExpertService(ExpertMapper expertMapper, ExpertRepository expertRepository, HttpClient httpClient, ObjectMapper objectMapper, List<ExpertUpdateStrategy> updateStrategyList) {
+    public ExpertService(ExpertMapper expertMapper, ExpertRepository expertRepository, HttpClient httpClient, ObjectMapper objectMapper, List<ExpertUpdateStrategy> updateStrategyList, MeterRegistry registry, Tracer tracer) {
         this.expertMapper = expertMapper;
         this.expertRepository = expertRepository;
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
         this.updateStrategyMap = new HashMap<>();
+        this.registry = registry;
+        this.tracer = tracer;
 
         for (ExpertUpdateStrategy strategy : updateStrategyList) {
             this.updateStrategyMap.putIfAbsent(strategy.getType(), strategy);
@@ -61,25 +69,42 @@ public class ExpertService {
 
     @Transactional
     public ExpertDto addNewExpert(String expertLink) {
-        if (expertLink == null || expertLink.isBlank()) {
-            throw new IllegalArgumentException("Expert link cant be null or blank");
+        Timer.Sample timer = Timer.start();
+        ScopedSpan span = tracer.startScopedSpan("create-expert-span");
+
+        try {
+            if (expertLink == null || expertLink.isBlank()) {
+                throw new IllegalArgumentException("Expert link cant be null or blank");
+            }
+            String expertNickname = expertLink.split("/")[3].toLowerCase();
+            AiAnalysisResponse aiAnalysisResponse = scanProfile(expertLink);
+
+            ExpertDomain newExpert = ExpertDomain.createExpert(
+                    expertLink,
+                    expertNickname,
+                    aiAnalysisResponse.coverage(),
+                    aiAnalysisResponse.targetAud(),
+                    aiAnalysisResponse.needs(),
+                    aiAnalysisResponse.levers()
+            );
+
+            Expert expert = expertMapper.domainToEntity(newExpert);
+            expertRepository.save(expert);
+
+            span.tag("status", "successful");
+            registry.counter("expert.creation.counter", "status", "successful").increment();
+
+            return expertMapper.entityToDto(expert);
+        } catch (Exception e) {
+            registry.counter("expert.creation.counter", "status", "failed").increment();
+            span.tag("status", "failed");
+            span.error(e);
+            span.tag("error.message", e.getMessage());
+
+            throw new RuntimeException(e);
+        } finally {
+            timer.stop(registry.timer("expert.creation.duration"));
         }
-        String expertNickname = expertLink.split("/")[3].toLowerCase();
-        AiAnalysisResponse aiAnalysisResponse = scanProfile(expertLink);
-
-        ExpertDomain newExpert = ExpertDomain.createExpert(
-                expertLink,
-                expertNickname,
-                aiAnalysisResponse.coverage(),
-                aiAnalysisResponse.targetAud(),
-                aiAnalysisResponse.needs(),
-                aiAnalysisResponse.levers()
-        );
-
-        Expert expert = expertMapper.domainToEntity(newExpert);
-        expertRepository.save(expert);
-
-        return expertMapper.entityToDto(expert);
     }
 
     @Transactional

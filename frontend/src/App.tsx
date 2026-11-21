@@ -20,8 +20,8 @@ import {
 
 import { getAssetUrl } from './utils/assets';
 
-const TASK_API = import.meta.env.VITE_TASK_API || "http://localhost:8081/api/v1/tasks";
-const SCAN_API = import.meta.env.VITE_SCAN_API || "http://localhost:8083/api/v1/expert";
+const TASK_API = import.meta.env.VITE_TASK_API || "https://task-service-production-8fef6048.up.railway.app/api/v1/tasks";
+const SCAN_API = import.meta.env.VITE_SCAN_API || "https://scan-service-production.up.railway.app/api/v1/expert";
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<string>('tasks');
@@ -47,7 +47,7 @@ export const App: React.FC = () => {
   const [experts, setExperts] = useState<ExpertData[]>([]);
   const [selectedExpert, setSelectedExpert] = useState<ExpertData | null>(null);
 
-  // Fetch real tasks from TaskService (:8081) with backend title search
+  // Fetch real tasks from TaskService with backend title search
   const fetchTasks = async (query?: string) => {
     try {
       const q = query !== undefined ? query.trim() : searchQuery.trim();
@@ -58,17 +58,21 @@ export const App: React.FC = () => {
         if (Array.isArray(data)) {
           setTasks(data);
         }
+        setBackendStatus(prev => ({ ...prev, task: true }));
       } else if (res.status === 404 || res.status === 400) {
         setTasks([]);
+        setBackendStatus(prev => ({ ...prev, task: true }));
+      } else {
+        setBackendStatus(prev => ({ ...prev, task: false }));
       }
     } catch {
-      // Backend offline
+      setBackendStatus(prev => ({ ...prev, task: false }));
     } finally {
       setIsLoadingTasks(false);
     }
   };
 
-  // Fetch real experts from ScanService (:8083)
+  // Fetch real experts from ScanService
   const fetchExperts = async () => {
     try {
       const res = await fetch(`${SCAN_API}/all`);
@@ -77,32 +81,13 @@ export const App: React.FC = () => {
         if (Array.isArray(data)) {
           setExperts(data);
         }
+        setBackendStatus(prev => ({ ...prev, scan: true }));
+      } else {
+        setBackendStatus(prev => ({ ...prev, scan: false }));
       }
     } catch {
-      // Backend offline
+      setBackendStatus(prev => ({ ...prev, scan: false }));
     }
-  };
-
-  // Health checks
-  const checkHealth = async () => {
-    let taskOk = false;
-    let scanOk = false;
-
-    try {
-      const r = await fetch(TASK_API);
-      taskOk = r.ok;
-    } catch {
-      taskOk = false;
-    }
-
-    try {
-      const r = await fetch(`${SCAN_API}/all`);
-      scanOk = r.ok;
-    } catch {
-      scanOk = false;
-    }
-
-    setBackendStatus({ task: taskOk, scan: scanOk });
   };
 
   // Debounced search for tasks by title
@@ -110,24 +95,23 @@ export const App: React.FC = () => {
     if (currentTab === 'tasks') {
       const timer = setTimeout(() => {
         fetchTasks(searchQuery);
-      }, 250);
+      }, 300);
       return () => clearTimeout(timer);
     }
   }, [searchQuery, currentTab]);
 
+  // Initial load and gentle background sync (every 15 seconds)
   useEffect(() => {
     fetchTasks();
     fetchExperts();
-    checkHealth();
     const interval = setInterval(() => {
-      checkHealth();
       fetchExperts();
       if (currentTab !== 'tasks' || !searchQuery.trim()) {
         fetchTasks();
       }
-    }, 5000);
+    }, 15000);
     return () => clearInterval(interval);
-  }, [searchQuery, currentTab]);
+  }, [currentTab]);
 
   // Update task status with meme reactions & real DB sync
   const handleUpdateStatus = async (taskId: string, newStatus: Task['taskStatus']) => {

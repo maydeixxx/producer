@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Plus, LayoutGrid, ListFilter, Sparkles, X, ArrowRight, User } from 'lucide-react';
+import { Search, Plus, LayoutGrid, ListFilter, Sparkles, X, ArrowRight, User, Menu } from 'lucide-react';
 import { Task, ExpertData } from '../types';
 import { playTick } from './AudioSynthesizer';
 
@@ -19,6 +19,7 @@ interface HeaderProps {
   experts?: ExpertData[];
   onSelectTask?: (task: Task) => void;
   onSelectExpert?: (expert: ExpertData) => void;
+  onToggleMobileMenu?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -36,7 +37,8 @@ export const Header: React.FC<HeaderProps> = ({
   tasks = [],
   experts = [],
   onSelectTask,
-  onSelectExpert
+  onSelectExpert,
+  onToggleMobileMenu
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -83,11 +85,23 @@ export const Header: React.FC<HeaderProps> = ({
   const hasSuggestions = matchingTasks.length > 0 || matchingExperts.length > 0;
 
   return (
-    <header className="h-16 border-b-2 border-border-strong bg-surface-0/95 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30 select-none shadow-sm">
+    <header className="h-16 border-b-2 border-border-strong bg-surface-0/95 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 select-none shadow-sm gap-2">
       
       {/* Left Title & Counter */}
-      <div className="flex items-center gap-3">
-        <h1 className="text-xl font-black italic tracking-tight text-white flex items-center gap-2.5 drop-shadow-sm">
+      <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        {onToggleMobileMenu && (
+          <button
+            onClick={() => {
+              playTick();
+              onToggleMobileMenu();
+            }}
+            className="p-1.5 rounded-lg bg-surface-100 hover:bg-surface-200 border border-border-subtle text-zinc-300 hover:text-white transition md:hidden"
+            title="Открыть меню"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
+        <h1 className="text-lg sm:text-xl font-black italic tracking-tight text-white flex items-center gap-2 sm:gap-2.5 drop-shadow-sm">
           <span>{title}</span>
           {taskCount !== undefined && (
             <span className="text-xs font-mono font-medium not-italic text-zinc-300 bg-surface-100 border border-border-subtle px-2 py-0.5 rounded-full">

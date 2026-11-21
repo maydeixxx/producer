@@ -123,7 +123,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
         setSubView('report');
         setNicknameNotFound(null);
         onShowReaction(
-          '/producer/assets/vlad_3.jpg',
+          '/assets/vlad_3.jpg',
           `ЭКСПЕРТ НАЙДЕН: @${expert.nickname}`,
           `«Охваты: ${expert.coverage ? expert.coverage.toLocaleString() : '—'}, болей аудитории: ${expert.needs?.length || 0}»`
         );
@@ -153,7 +153,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
       if (res.ok) {
         const data = await res.json();
         setSelectedExpert(data);
-        onShowReaction('/producer/assets/vlad_3.jpg', `АНАЛИЗ ЗАВЕРШЕН: @${data.nickname}`, '«Охваты и боли целевой аудитории собраны в базу!»');
+        onShowReaction('/assets/vlad_3.jpg', `АНАЛИЗ ЗАВЕРШЕН: @${data.nickname}`, '«Охваты и боли целевой аудитории собраны в базу!»');
         await fetchExperts();
         setSubView('report');
         setUrl('');
@@ -198,7 +198,7 @@ export const InstaScoutPage: React.FC<InstaScoutPageProps> = ({
         if (selectedExpert && selectedExpert.nickname === nickname) {
           setSelectedExpert(null);
         }
-        onShowReaction('/producer/assets/vlad_8.jpg', 'ЭКСПЕРТ УДАЛЕН', `«Профиль @${nickname} удален из аналитики»`);
+        onShowReaction('/assets/vlad_8.jpg', 'ЭКСПЕРТ УДАЛЕН', `«Профиль @${nickname} удален из аналитики»`);
       }
     } catch {
       //

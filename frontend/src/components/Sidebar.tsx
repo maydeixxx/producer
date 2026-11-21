@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { playTick, triggerKlaxon, triggerBeerToast } from './AudioSynthesizer';
 
+import { getAssetUrl } from '../utils/assets';
+
 interface SidebarProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
@@ -31,6 +33,8 @@ interface SidebarProps {
   };
   currentPersonaImg: string;
   onCyclePersona: () => void;
+  isOpenMobile?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -42,20 +46,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
   backendStatus,
   currentPersonaImg,
   onCyclePersona,
+  isOpenMobile,
+  onCloseMobile,
 }) => {
   const handleNavClick = (tab: string) => {
     playTick();
     setCurrentTab(tab);
+    if (onCloseMobile) onCloseMobile();
   };
 
   const handleFilterClick = (filter: string) => {
     playTick();
     setCurrentTab('tasks');
     setTaskFilter(filter);
+    if (onCloseMobile) onCloseMobile();
   };
 
   return (
-    <aside className="w-64 bg-surface-50 border-r-2 border-border-strong flex flex-col justify-between shrink-0 select-none h-screen sticky top-0 shadow-lg">
+    <>
+      {/* Mobile Backdrop */}
+      {isOpenMobile && (
+        <div 
+          onClick={onCloseMobile}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden animate-fade-in"
+        />
+      )}
+
+      <aside className={`w-64 bg-surface-50 border-r-2 border-border-strong flex flex-col justify-between shrink-0 select-none h-screen fixed md:sticky top-0 z-50 shadow-2xl md:shadow-lg transition-transform duration-300 ${
+        isOpenMobile ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}>
       
       {/* Top Branding */}
       <div>
@@ -66,7 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <div className="relative">
               <img 
-                src={currentPersonaImg} 
+                src={getAssetUrl(currentPersonaImg)} 
                 alt="Кабан" 
                 className="w-8 h-8 rounded-lg object-cover border border-border-subtle group-hover:border-accent-orange transition" 
               />
@@ -264,7 +283,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <div className="flex items-center gap-2">
             <img 
-              src={currentPersonaImg} 
+              src={getAssetUrl(currentPersonaImg)} 
               alt="Владик" 
               className="w-6 h-6 rounded-md object-cover border border-border-subtle group-hover:scale-105 transition"
             />
@@ -279,5 +298,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
     </aside>
+    </>
   );
 };

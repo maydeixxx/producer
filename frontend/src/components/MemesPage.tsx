@@ -3,6 +3,7 @@ import { Heart, Volume2, Edit3 } from 'lucide-react';
 import { CURATED_MEMES } from './memeData';
 import { MemeItem } from '../types';
 import { playTick, triggerKlaxon, triggerBoarRoar, triggerBeerToast } from './AudioSynthesizer';
+import { getAssetUrl } from '../utils/assets';
 
 interface MemesPageProps {
   onOpenInStudio: (meme: MemeItem) => void;
@@ -97,7 +98,7 @@ export const MemesPage: React.FC<MemesPageProps> = ({ onOpenInStudio, onShowReac
             {/* Photo */}
             <div className="relative aspect-square overflow-hidden rounded-lg bg-zinc-900 border border-zinc-700">
               <img
-                src={m.photo}
+                src={getAssetUrl(m.photo)}
                 alt="Владик"
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
               />

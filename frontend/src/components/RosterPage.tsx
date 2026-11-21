@@ -3,6 +3,7 @@ import { Volume2, RefreshCw } from 'lucide-react';
 import { PERSONAS } from './memeData';
 import { PersonaItem } from '../types';
 import { playTick, triggerKlaxon } from './AudioSynthesizer';
+import { getAssetUrl } from '../utils/assets';
 
 interface RosterPageProps {
   onSelectPersona: (persona: PersonaItem) => void;
@@ -59,7 +60,7 @@ export const RosterPage: React.FC<RosterPageProps> = ({ onSelectPersona }) => {
           >
             <div className="relative aspect-square overflow-hidden rounded-lg bg-zinc-900 border border-zinc-800 group-hover:border-zinc-600 transition">
               <img
-                src={p.img}
+                src={getAssetUrl(p.img)}
                 alt={p.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
               />

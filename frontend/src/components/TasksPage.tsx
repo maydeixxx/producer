@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { Task, TaskType } from '../types';
 import { playTick } from './AudioSynthesizer';
+import { getAssetUrl } from '../utils/assets';
 
 interface TasksPageProps {
   tasks: Task[];
@@ -55,10 +56,10 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   });
 
   const getTaskAvatar = (t: Task): string => {
-    if (t.taskType === 'UNIVERSITY') return '/producer/assets/vlad_2.jpg'; // Швабра
-    if (t.taskType === 'LAUNCH') return '/producer/assets/vlad_1.jpg'; // Кабан
-    if (t.taskPriority === 'HIGH') return '/producer/assets/vlad_6.jpg'; // Клаксон
-    return '/producer/assets/vlad_4.jpg'; // Сэр похмелье
+    if (t.taskType === 'UNIVERSITY') return getAssetUrl('/assets/vlad_2.jpg'); // Швабра
+    if (t.taskType === 'LAUNCH') return getAssetUrl('/assets/vlad_1.jpg'); // Кабан
+    if (t.taskPriority === 'HIGH') return getAssetUrl('/assets/vlad_6.jpg'); // Клаксон
+    return getAssetUrl('/assets/vlad_4.jpg'); // Сэр похмелье
   };
 
   const getTypeBadge = (type: TaskType) => {

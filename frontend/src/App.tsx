@@ -18,11 +18,14 @@ import {
   playTick 
 } from './components/AudioSynthesizer';
 
+import { getAssetUrl } from './utils/assets';
+
 const TASK_API = import.meta.env.VITE_TASK_API || "http://localhost:8081/api/v1/tasks";
 const SCAN_API = import.meta.env.VITE_SCAN_API || "http://localhost:8083/api/v1/expert";
 
 export const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<string>('tasks');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [taskFilter, setTaskFilter] = useState<string>('ALL');
   const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -134,14 +137,14 @@ export const App: React.FC = () => {
     if (newStatus === 'DONE') {
       triggerBeerToast();
       setReactionToast({
-        img: '/producer/assets/vlad_11.jpg',
+        img: '/assets/vlad_11.jpg',
         title: 'ТРИУМФ КАБАНА!',
         quote: '«Задача закрыта! Накрывай поляну!»'
       });
     } else if (newStatus === 'PROCESSING') {
       triggerBoarRoar();
       setReactionToast({
-        img: '/producer/assets/vlad_1.jpg',
+        img: '/assets/vlad_1.jpg',
         title: 'КАБАН В ЯРОСТИ!',
         quote: '«Задача взята в работу! Жим 300 кг!»'
       });
@@ -221,7 +224,7 @@ export const App: React.FC = () => {
       await Promise.all(promises);
       await fetchTasks();
       setReactionToast({
-        img: '/producer/assets/vlad_10.jpg',
+        img: '/assets/vlad_10.jpg',
         title: 'ЗАДАЧА ОБНОВЛЕНА!',
         quote: '«Все изменения сохранены в системе!»'
       });
@@ -235,7 +238,7 @@ export const App: React.FC = () => {
     playTick();
     setTasks(prev => prev.filter(t => t.id !== taskId));
     setReactionToast({
-      img: '/producer/assets/vlad_8.jpg',
+      img: '/assets/vlad_8.jpg',
       title: 'ШВАБРА ОПЕРАТИВНАЯ!',
       quote: '«Швабра вымела задачу из списка!»'
     });
@@ -269,7 +272,7 @@ export const App: React.FC = () => {
     };
 
     setReactionToast({
-      img: '/producer/assets/vlad_6.jpg',
+      img: '/assets/vlad_6.jpg',
       title: 'НОВАЯ ЗАДАЧА!',
       quote: '«Задача успешно добавлена! Клаксон взведён!»'
     });
@@ -340,8 +343,10 @@ export const App: React.FC = () => {
         setTaskFilter={setTaskFilter}
         taskCounts={taskCounts}
         backendStatus={backendStatus}
-        currentPersonaImg={currentPersona.img}
+        currentPersonaImg={getAssetUrl(currentPersona.img)}
         onCyclePersona={handleCyclePersona}
+        isOpenMobile={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
       />
 
       {/* Main Content Area */}
@@ -379,10 +384,11 @@ export const App: React.FC = () => {
             setSelectedExpert(e);
             setCurrentTab('scout');
           }}
+          onToggleMobileMenu={() => setIsMobileMenuOpen(prev => !prev)}
         />
 
         {/* Tab Views */}
-        <main className="flex-1 p-6 max-w-7xl w-full mx-auto overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-6 max-w-7xl w-full mx-auto overflow-y-auto">
           {currentTab === 'tasks' && (
             <TasksPage
               tasks={tasks}

@@ -45,7 +45,7 @@ export const MemeGeneratorPage: React.FC<MemeGeneratorPageProps> = ({ initialMem
     if (!ctx) return;
 
     const img = new Image();
-    img.src = `/assets/vlad_${selectedPhoto}.jpg`;
+    img.src = `/producer/assets/vlad_${selectedPhoto}.jpg`;
     img.onload = () => {
       canvas.width = 600;
       canvas.height = 600;
@@ -216,7 +216,7 @@ export const MemeGeneratorPage: React.FC<MemeGeneratorPageProps> = ({ initialMem
                     selectedPhoto === num ? 'border-accent-orange scale-105' : 'border-zinc-700 hover:border-zinc-400'
                   }`}
                 >
-                  <img src={`/assets/vlad_${num}.jpg`} alt={`Владик ${num}`} className="w-full h-full object-cover" />
+                  <img src={`/producer/assets/vlad_${num}.jpg`} alt={`Владик ${num}`} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>

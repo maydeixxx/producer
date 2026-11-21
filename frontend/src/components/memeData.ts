@@ -4,7 +4,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 1,
     category: 'kaban',
-    photo: '/assets/vlad_1.jpg',
+    photo: '/producer/assets/vlad_1.jpg',
     topText: '300 КГ ЖИМ НОГАМИ НА 7 ПОВТОРЕНИЙ',
     bottomText: 'КАБАН ЕБАНЫЙ ЗАКРЫВАЕТ ЗАПУСК С НОГИ',
     tag: '#КабанЕбаный',
@@ -13,7 +13,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 2,
     category: 'shvabra',
-    photo: '/assets/vlad_2.jpg',
+    photo: '/producer/assets/vlad_2.jpg',
     topText: 'ПРЕПОД: "ГДЕ ЛАБА ПО БАЗАМ ДАННЫХ?"',
     bottomText: 'ПОГОНЯЛО ШВАБРА, ГУДОК, КЛАКСОН НА 140 ДБ',
     tag: '#ШвабраГудок',
@@ -22,7 +22,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 3,
     category: 'dron',
-    photo: '/assets/vlad_3.jpg',
+    photo: '/producer/assets/vlad_3.jpg',
     topText: 'ВЫСОТА 3000 МЕТРОВ НАД УРОВНЕМ МОРЯ',
     bottomText: 'РЕЖИМ "ДРОН ПИДРОН" СКАНИРУЕТ РИЛСЫ КОНКУРЕНТОВ',
     tag: '#ДронПидрон',
@@ -31,7 +31,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 4,
     category: 'pohmel',
-    photo: '/assets/vlad_4.jpg',
+    photo: '/producer/assets/vlad_4.jpg',
     topText: 'УТРО ПОНЕДЕЛЬНИКА, ПАРА В 8:30',
     bottomText: 'СЭР ПОХМЕЛЬЕ ВЫПИЛ РАССОЛ И ЗАКРЫЛ КОНТРАКТ НА МИЛЛИОН',
     tag: '#СэрПохмелье',
@@ -40,7 +40,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 5,
     category: 'pohmel',
-    photo: '/assets/vlad_5.jpg',
+    photo: '/producer/assets/vlad_5.jpg',
     topText: 'НЕ СХОДИТСЯ ЭКОНОМИКА ЗАПУСКА?',
     bottomText: 'АЛКАШ РЕШАЕТ ВСЕ ВОПРОСЫ ПОСЛЕ 3-ГО ТОСТА В КАРАОКЕ',
     tag: '#Алкаш',
@@ -49,7 +49,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 6,
     category: 'shvabra',
-    photo: '/assets/vlad_6.jpg',
+    photo: '/producer/assets/vlad_6.jpg',
     topText: 'ВРЕМЯ 23:58. ДЕДЛАЙН ЧЕРЕЗ 2 МИНУТЫ',
     bottomText: 'ЭКСТРЕННЫЙ КЛАКСОН БУДИТ ВЕСЬ СТУДГОРОДОК',
     tag: '#Клаксон140dB',
@@ -58,7 +58,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 7,
     category: 'shvabra',
-    photo: '/assets/vlad_7.jpg',
+    photo: '/producer/assets/vlad_7.jpg',
     topText: 'КЛИЕНТ: "А МОЖНО СКИДОЧКУ 50%?"',
     bottomText: 'БОЕВОЙ ВАФЛЕДРОН ВЫЕЗЖАЕТ К ТЕБЕ НА РАЙОН',
     tag: '#Вафледрон',
@@ -67,7 +67,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 8,
     category: 'shvabra',
-    photo: '/assets/vlad_8.jpg',
+    photo: '/producer/assets/vlad_8.jpg',
     topText: 'НАУЧРУК СПРОСИЛ ПРО ДОЛГИ ПО СЕССИИ',
     bottomText: 'ШВАБРА ОПЕРАТИВНАЯ ВЫМЕТАЕТ БЭКЛОГ ЗА 10 МИНУТ',
     tag: '#Швабра',
@@ -76,7 +76,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 9,
     category: 'dron',
-    photo: '/assets/vlad_9.jpg',
+    photo: '/producer/assets/vlad_9.jpg',
     topText: 'КОГДА СМОТРИШЬ ОХВАТЫ В 4 ЧАСА УТРА',
     bottomText: 'ДРОН В ЗАСАДЕ: 0% ШУМА, 100% СТЕЛС',
     tag: '#ДронВЗасаде',
@@ -85,7 +85,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 10,
     category: 'pohmel',
-    photo: '/assets/vlad_10.jpg',
+    photo: '/producer/assets/vlad_10.jpg',
     topText: 'МИНЕРАЛКА ПОПАЛА В КРОВОТОК',
     bottomText: 'ВТОРОЕ ДЫХАНИЕ: МОЗГ ГЕНЕРИРУЕТ СВЕРХПРИБЫЛЬ',
     tag: '#ВтороеДыхание',
@@ -94,7 +94,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 11,
     category: 'kaban',
-    photo: '/assets/vlad_11.jpg',
+    photo: '/producer/assets/vlad_11.jpg',
     topText: 'ЛАБЫ СДАНЫ, ЗАПУСК НА 5 МИЛЛИОНОВ В КАРМАНЕ',
     bottomText: 'ТРИУМФ КАБАНА: ПОЛЯНА НАКРЫТА ЗА МОЙ СЧЁТ',
     tag: '#ТриумфКабана',
@@ -103,7 +103,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 12,
     category: 'kaban',
-    photo: '/assets/vlad_12.jpg',
+    photo: '/producer/assets/vlad_12.jpg',
     topText: 'УПАЛ ПРОД НА SPRING BOOT В 4 УТРА?',
     bottomText: 'ИСТИННЫЙ КЕНТ ВСЁ ПОДНИМЕТ И НАЛЬЁТ ПИВА',
     tag: '#КаноничныйКент',
@@ -112,7 +112,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 13,
     category: 'kaban',
-    photo: '/assets/vlad_13.jpg',
+    photo: '/producer/assets/vlad_13.jpg',
     topText: 'ВЗГЛЯД ХИЩНИКА ПЕРЕД ВЗЯТИЕМ ВЕСА',
     bottomText: 'СВЕРХКАБАН ВЫХОДИТ НА ОХОТУ ЗА ЛИДАМИ',
     tag: '#Сверхкабан',
@@ -121,7 +121,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 14,
     category: 'shvabra',
-    photo: '/assets/vlad_14.jpg',
+    photo: '/producer/assets/vlad_14.jpg',
     topText: 'КОГДА УСЛЫШАЛ СКРИП НЕОПЛАЧЕННОГО СЧЁТА',
     bottomText: 'ИНЖЕНЕР-КЛАКСОНЩИК НАСТРАИВАЕТ ЧАСТОТУ 140 ДБ',
     tag: '#Клаксонщик',
@@ -130,7 +130,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 15,
     category: 'shvabra',
-    photo: '/assets/vlad_15.jpg',
+    photo: '/producer/assets/vlad_15.jpg',
     topText: 'ГОРЯТ ДЕДЛАЙНЫ ПО УНИВЕРУ И ЗАПУСКУ',
     bottomText: 'ШВАБРА ВЫСОКОГО ДАВЛЕНИЯ ЧИСТИТ ОШИБКИ В КОДЕ',
     tag: '#ШвабраДавления',
@@ -139,7 +139,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 16,
     category: 'dron',
-    photo: '/assets/vlad_16.jpg',
+    photo: '/producer/assets/vlad_16.jpg',
     topText: 'ЦЕЛЕВАЯ АУДИТОРИЯ ОБНАРУЖЕНА НА ТЕПЛОВИЗОРЕ',
     bottomText: 'ДРОН-КАМИКАДЗЕ ВЛЕТАЕТ В ДИРЕКТ С ОФФЕРОМ',
     tag: '#ДронКамикадзе',
@@ -148,7 +148,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 17,
     category: 'pohmel',
-    photo: '/assets/vlad_17.jpg',
+    photo: '/producer/assets/vlad_17.jpg',
     topText: 'СТИЛЬ НЕ ПРОПЬЁШЬ ДАЖЕ ЗА ТРИ ДНЯ',
     bottomText: 'СЭР ПОХМЕЛЬЕ В СМОКИНГЕ ПОДПИСЫВАЕТ ДОГОВОР',
     tag: '#СэрВКураже',
@@ -157,7 +157,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 18,
     category: 'kaban',
-    photo: '/assets/vlad_18.jpg',
+    photo: '/producer/assets/vlad_18.jpg',
     topText: 'ГЛУБОКИЙ АНАЛИЗ ВОРОНКИ ПРОДАЖ',
     bottomText: 'КАБАН-СТРАТЕГ ВИДИТ ПРИБЫЛЬ СКВОЗЬ СТЕНЫ',
     tag: '#КабанСтратег',
@@ -166,7 +166,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 19,
     category: 'shvabra',
-    photo: '/assets/vlad_19.jpg',
+    photo: '/producer/assets/vlad_19.jpg',
     topText: 'ТАКТИЧЕСКИЙ РЕЖИМ ВКЛЮЧЕН',
     bottomText: 'ВАФЛЕДРОН НОЧНОГО ВИДЕНИЯ БДИ СВОЙ СЕРВЕР',
     tag: '#НочнойВафледрон',
@@ -175,7 +175,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 20,
     category: 'shvabra',
-    photo: '/assets/vlad_20.jpg',
+    photo: '/producer/assets/vlad_20.jpg',
     topText: 'КЛАКСОН НА МАКСИМАЛЬНОЙ ГРОМКОСТИ',
     bottomText: 'СОСЕДИ СНИЗУ ПОСТАВИЛИ ЛАЙК ПОД РИЛСОМ',
     tag: '#ТурбоКлаксон',
@@ -184,7 +184,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 21,
     category: 'kaban',
-    photo: '/assets/vlad_21.jpg',
+    photo: '/producer/assets/vlad_21.jpg',
     topText: 'ГЛАВНЫЙ ИНФОПРОДЮСЕР СИБИРИ',
     bottomText: 'КОНВЕРСИЯ ВЕБИНАРА 98% БЕЗ СКИДОК И ПРОГРЕВА',
     tag: '#ПродюсерСибири',
@@ -193,7 +193,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 22,
     category: 'pohmel',
-    photo: '/assets/vlad_22.jpg',
+    photo: '/producer/assets/vlad_22.jpg',
     topText: 'ПОВЕЛИТЕЛЬ РАССОЛА И ХОЛОДНОГО БОРЖОМИ',
     bottomText: 'ВОДНО-СОЛЕВОЙ БАЛАНС ВОССТАНОВЛЕН НА 100%',
     tag: '#ПовелительРассола',
@@ -202,7 +202,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 23,
     category: 'dron',
-    photo: '/assets/vlad_23.jpg',
+    photo: '/producer/assets/vlad_23.jpg',
     topText: 'СКАНИРОВАНИЕ КОНКУРЕНТОВ НА ГЛУБИНЕ 50 МЕТРОВ',
     bottomText: 'ДРОН ГЛУБОКОГО БУРЕНИЯ НАШЁЛ СВЯЗКУ НА МИЛЛИОН',
     tag: '#ГлубокийДрон',
@@ -211,7 +211,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 24,
     category: 'kaban',
-    photo: '/assets/vlad_24.jpg',
+    photo: '/producer/assets/vlad_24.jpg',
     topText: 'КАБАН В КОСТЮМЕ-ТРОЙКЕ НА СОВЕТЕ ДИРЕКТОРОВ',
     bottomText: 'ВОПРОСЫ ЕСТЬ? ВОПРОСОВ НЕТ, ЖИМ 300 КГ!',
     tag: '#ДеловойКабан',
@@ -220,7 +220,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 25,
     category: 'shvabra',
-    photo: '/assets/vlad_25.jpg',
+    photo: '/producer/assets/vlad_25.jpg',
     topText: 'АНТИКРИЗИСНАЯ ШВАБРА ЗА РАБОТОЙ',
     bottomText: 'ВЫМЕЛА ВСЕ БАГИ ИЗ РЕПОЗИТОРИЯ ЗА ОДИН КОММИТ',
     tag: '#АнтикризисШвабра',
@@ -229,7 +229,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 26,
     category: 'shvabra',
-    photo: '/assets/vlad_26.jpg',
+    photo: '/producer/assets/vlad_26.jpg',
     topText: 'КЛАКСОН СУДНОГО ДНЯ АКТИВИРОВАН',
     bottomText: 'ПРЕПОДАВАТЕЛЬ СТАВИТ АВТОМАТ ИЗ ДРУГОГО ГОРОДА',
     tag: '#СудныйКлаксон',
@@ -238,7 +238,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 27,
     category: 'pohmel',
-    photo: '/assets/vlad_27.jpg',
+    photo: '/producer/assets/vlad_27.jpg',
     topText: 'ОТДЫХ ПОСЛЕ УСПЕШНОГО ЗАПУСКА',
     bottomText: 'СЭР ПОХМЕЛЬЕ НА РЕЛАКСЕ СЧИТАЕТ ДИВИДЕНДЫ',
     tag: '#ПохмельеНаРелаксе',
@@ -247,7 +247,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 28,
     category: 'kaban',
-    photo: '/assets/vlad_28.jpg',
+    photo: '/producer/assets/vlad_28.jpg',
     topText: 'КАБАН-ТЯЖЕЛОВЕС ВЕРНУЛСЯ ИЗ ЗАЛА',
     bottomText: 'ДВЕРИ В ОБЩАГУ БОЛЬШЕ НЕ НУЖНЫ, ОН ВХОДИТ СКВОЗЬ СТЕНУ',
     tag: '#ТяжеловесКабан',
@@ -256,7 +256,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 29,
     category: 'dron',
-    photo: '/assets/vlad_29.jpg',
+    photo: '/producer/assets/vlad_29.jpg',
     topText: 'ПЕРЕХВАТЧИК ТРЕНДОВ В ТИКТОКЕ И РИЛСАХ',
     bottomText: 'ДРОН-ОХОТНИК ЗАБИРАЕТ ВСЕ ПРОСМОТРЫ СЕБЕ',
     tag: '#ДронОхотник',
@@ -265,7 +265,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 30,
     category: 'shvabra',
-    photo: '/assets/vlad_30.jpg',
+    photo: '/producer/assets/vlad_30.jpg',
     topText: 'СВЕРХЗВУКОВОЙ ВАФЛЕДРОН В ВОЗДУХЕ',
     bottomText: 'ДОЛЖНИКИ ВОЗВРАЩАЮТ ДЕНЬГИ ЕЩЁ ДО ЗВОНКА',
     tag: '#СверхзвуковойВафледрон',
@@ -274,7 +274,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 31,
     category: 'pohmel',
-    photo: '/assets/vlad_31.jpg',
+    photo: '/producer/assets/vlad_31.jpg',
     topText: 'ФИЛОСОФИЯ БЫТИЯ ПОСЛЕ ТРЕТЬЕЙ БУТЫЛКИ',
     bottomText: 'АЛКАШ-МЫСЛИТЕЛЬ ОБЪЯСНЯЕТ СМЫСЛ ЖИЗНИ ЗА 2 МИНУТЫ',
     tag: '#АлкашМыслитель',
@@ -283,7 +283,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 32,
     category: 'kaban',
-    photo: '/assets/vlad_32.jpg',
+    photo: '/producer/assets/vlad_32.jpg',
     topText: 'ВСЕ ДЕДЛАЙНЫ УНИЧТОЖЕНЫ ДОСРОЧНО',
     bottomText: 'КАБАН-ПОБЕДИТЕЛЬ ПРАЗДНУЕТ ЗАКРЫТИЕ СЕССИИ',
     tag: '#ПобедительКабан',
@@ -292,7 +292,7 @@ export const CURATED_MEMES: MemeItem[] = [
   {
     id: 33,
     category: 'kaban',
-    photo: '/assets/vlad_33.jpg',
+    photo: '/producer/assets/vlad_33.jpg',
     topText: 'ЛЕГЕНДАРНЫЙ КЕНТ ВСЕЯ РУСИ',
     bottomText: 'НИКОГДА НЕ ПРЕДАСТ, ВСЕГДА НАЛЬЁТ И ПОМОЖЕТ',
     tag: '#ЛегендарныйБро',
@@ -301,39 +301,39 @@ export const CURATED_MEMES: MemeItem[] = [
 ];
 
 export const PERSONAS: PersonaItem[] = [
-  { id: 1, title: "Кабан ебаный", badge: "Амбассадор", img: "/assets/vlad_1.jpg", quote: "«300 кг жим ногами. Возражения ЦА сломаны с ноги.»", stat: "115 кг • ER 48.9%" },
-  { id: 2, title: "Погоняло Швабра, гудок, клаксон", badge: "Сирена", img: "/assets/vlad_2.jpg", quote: "«Если лаба горит, сирена звучит прямо в душу на 140 дБ.»", stat: "140 dB • 2.4 GHz" },
-  { id: 3, title: "Дрон пидрон", badge: "Разведка", img: "/assets/vlad_3.jpg", quote: "«Высота 3000 м. Сканирует рилсы конкурентов через тепловизор.»", stat: "Высота 3 км • РЭБ" },
-  { id: 4, title: "Сэр похмелье", badge: "Аналитик", img: "/assets/vlad_4.jpg", quote: "«Закрывает сделки на 1М+ в полуобмороке с банкой рассола.»", stat: "0.8 ‰ • 99% харизма" },
-  { id: 5, title: "Алкаш", badge: "Нетворкинг", img: "/assets/vlad_5.jpg", quote: "«Все контракты подписываются им строго после 3-го тоста в караоке.»", stat: "100% конверсия" },
-  { id: 6, title: "Клаксон экстренный", badge: "Пожар", img: "/assets/vlad_6.jpg", quote: "«Будит студента за 15 минут до дедлайна лабы по БД.»", stat: "160 dB • Alert" },
-  { id: 7, title: "Вафледрон боевой", badge: "Штурм", img: "/assets/vlad_7.jpg", quote: "«Особая форма для выбивания оплат с недобросовестных клиентов.»", stat: "Броня 100 • Урон 99" },
-  { id: 8, title: "Швабра оперативная", badge: "Клининг", img: "/assets/vlad_8.jpg", quote: "«Выметает зависшие задачи из бэклога за 10 минут до прихода научрука.»", stat: "50 задач/мин" },
-  { id: 9, title: "Дрон в засаде", badge: "Стелс", img: "/assets/vlad_9.jpg", quote: "«Скрытное чтение комментариев в Инсте со скоростью света.»", stat: "0 шума • Stealth" },
-  { id: 10, title: "Второе дыхание", badge: "Регенерация", img: "/assets/vlad_10.jpg", quote: "«Рассол подействовал. Мозг выдает гипотезы уровня Forbes.»", stat: "IQ 160 • Реген" },
-  { id: 11, title: "Триумф Кабана", badge: "Финал", img: "/assets/vlad_11.jpg", quote: "«Запуск на 5 миллионов закрыт. Лабы сданы, накрыта поляна.»", stat: "5,000,000 ₽" },
-  { id: 12, title: "Каноничный кент", badge: "Бро", img: "/assets/vlad_12.jpg", quote: "«Настоящий бро, который поможет поднять Spring Boot в 4 утра.»", stat: "Преданность: ∞" },
-  { id: 13, title: "Сверхкабан на массе", badge: "Тяга", img: "/assets/vlad_13.jpg", quote: "«Масса набрана, лиды залиты, запуск летит в космос.»", stat: "125 кг • Сила" },
-  { id: 14, title: "Инженер-Клаксонщик", badge: "Акустика", img: "/assets/vlad_14.jpg", quote: "«Регулирует частоту клаксона для максимального пробития дедлайнов.»", stat: "180 dB • Частота" },
-  { id: 15, title: "Швабра высокого давления", badge: "Клининг Pro", img: "/assets/vlad_15.jpg", quote: "«Смывает любые технические долги под напором 200 бар.»", stat: "200 Bar • Чистота" },
-  { id: 16, title: "Дрон-Камикадзе", badge: "Штурмовик", img: "/assets/vlad_16.jpg", quote: "«Точечный влёт в Директ эксперта с оффером от которого нельзя отказаться.»", stat: "Скорость 300 км/ч" },
-  { id: 17, title: "Сэр Похмелье в смокинге", badge: "Элита", img: "/assets/vlad_17.jpg", quote: "«Даже в полном нокауте подписывает договоры на миллион с бокалом минералки.»", stat: "Шарм 100 • Стиль" },
-  { id: 18, title: "Кабан-Стратег", badge: "Тактика", img: "/assets/vlad_18.jpg", quote: "«Строит продюсерские воронки с закрытыми глазами.»", stat: "Стратегия 99" },
-  { id: 19, title: "Вафледрон Ночного Видения", badge: "Ночь", img: "/assets/vlad_19.jpg", quote: "«Охраняет прод в 4 утра, пока вся команда спит.»", stat: "Тепловизор • 4K" },
-  { id: 20, title: "Клаксон 180 dB Турбо", badge: "Ультразвук", img: "/assets/vlad_20.jpg", quote: "«Звуковой удар, пробуждающий команду к сдаче спринта.»", stat: "180 dB • Турбо" },
-  { id: 21, title: "Продюсер Сибири", badge: "Легенда", img: "/assets/vlad_21.jpg", quote: "«Собрал зал на 10 000 человек одним сторисом в Telegram.»", stat: "Конверсия 98%" },
-  { id: 22, title: "Повелитель Рассола", badge: "Алхимия", img: "/assets/vlad_22.jpg", quote: "«Секретная формула электролитов, воскрешающая после любого нетворкинга.»", stat: "100% Баланс" },
-  { id: 23, title: "Дрон Глубокого Бурения", badge: "Сейсмо", img: "/assets/vlad_23.jpg", quote: "«Достает скрытые боли аудитории из самых глубин комментариев.»", stat: "Глубина 50м" },
-  { id: 24, title: "Деловой Кабан", badge: "Совет Директоров", img: "/assets/vlad_24.jpg", quote: "«Серьезный разговор на миллион рублей с партнерами.»", stat: "Капитал ∞" },
-  { id: 25, title: "Швабра Антикризисная", badge: "Аварийный", img: "/assets/vlad_25.jpg", quote: "«Быстрое устранение любых факапов на проекте.»", stat: "Скорость x10" },
-  { id: 26, title: "Клаксон Судного Дня", badge: "Апокалипсис", img: "/assets/vlad_26.jpg", quote: "«Когда дедлайн наступил вчера. Звучит на весь мир.»", stat: "200 dB" },
-  { id: 27, title: "Похмелье на Релаксе", badge: "Дзен", img: "/assets/vlad_27.jpg", quote: "«Абсолютное спокойствие после закрытого квартала.»", stat: "Дзен 100%" },
-  { id: 28, title: "Кабан-Тяжеловес", badge: "Титан", img: "/assets/vlad_28.jpg", quote: "«Берет на себя любую нагрузку и не прогибается.»", stat: "Броня 500" },
-  { id: 29, title: "Дрон-Охотник за Трендовой Музыкой", badge: "АудиоРЭБ", img: "/assets/vlad_29.jpg", quote: "«Находит вирусные звуки для рилсов за неделю до того, как они залетят.»", stat: "Тренды 100%" },
-  { id: 30, title: "Сверхзвуковой Вафледрон", badge: "Сверхзвук", img: "/assets/vlad_30.jpg", quote: "«Доставка правок клиенту со скоростью звука.»", stat: "Мах 3.5" },
-  { id: 31, title: "Алкаш-Мыслитель", badge: "Философия", img: "/assets/vlad_31.jpg", quote: "«Вскрывает глубинные инсайты за барной стойкой.»", stat: "Мудрость ∞" },
-  { id: 32, title: "Победитель Дедлайнов", badge: "Чемпион", img: "/assets/vlad_32.jpg", quote: "«Ни один дедлайн не ушёл живым.»", stat: "Побед: 100%" },
-  { id: 33, title: "Легендарный Бро", badge: "Абсолют", img: "/assets/vlad_33.jpg", quote: "«Тот самый лучший кент, на котором держится весь этот мир.»", stat: "Карма 10000" }
+  { id: 1, title: "Кабан ебаный", badge: "Амбассадор", img: "/producer/assets/vlad_1.jpg", quote: "«300 кг жим ногами. Возражения ЦА сломаны с ноги.»", stat: "115 кг • ER 48.9%" },
+  { id: 2, title: "Погоняло Швабра, гудок, клаксон", badge: "Сирена", img: "/producer/assets/vlad_2.jpg", quote: "«Если лаба горит, сирена звучит прямо в душу на 140 дБ.»", stat: "140 dB • 2.4 GHz" },
+  { id: 3, title: "Дрон пидрон", badge: "Разведка", img: "/producer/assets/vlad_3.jpg", quote: "«Высота 3000 м. Сканирует рилсы конкурентов через тепловизор.»", stat: "Высота 3 км • РЭБ" },
+  { id: 4, title: "Сэр похмелье", badge: "Аналитик", img: "/producer/assets/vlad_4.jpg", quote: "«Закрывает сделки на 1М+ в полуобмороке с банкой рассола.»", stat: "0.8 ‰ • 99% харизма" },
+  { id: 5, title: "Алкаш", badge: "Нетворкинг", img: "/producer/assets/vlad_5.jpg", quote: "«Все контракты подписываются им строго после 3-го тоста в караоке.»", stat: "100% конверсия" },
+  { id: 6, title: "Клаксон экстренный", badge: "Пожар", img: "/producer/assets/vlad_6.jpg", quote: "«Будит студента за 15 минут до дедлайна лабы по БД.»", stat: "160 dB • Alert" },
+  { id: 7, title: "Вафледрон боевой", badge: "Штурм", img: "/producer/assets/vlad_7.jpg", quote: "«Особая форма для выбивания оплат с недобросовестных клиентов.»", stat: "Броня 100 • Урон 99" },
+  { id: 8, title: "Швабра оперативная", badge: "Клининг", img: "/producer/assets/vlad_8.jpg", quote: "«Выметает зависшие задачи из бэклога за 10 минут до прихода научрука.»", stat: "50 задач/мин" },
+  { id: 9, title: "Дрон в засаде", badge: "Стелс", img: "/producer/assets/vlad_9.jpg", quote: "«Скрытное чтение комментариев в Инсте со скоростью света.»", stat: "0 шума • Stealth" },
+  { id: 10, title: "Второе дыхание", badge: "Регенерация", img: "/producer/assets/vlad_10.jpg", quote: "«Рассол подействовал. Мозг выдает гипотезы уровня Forbes.»", stat: "IQ 160 • Реген" },
+  { id: 11, title: "Триумф Кабана", badge: "Финал", img: "/producer/assets/vlad_11.jpg", quote: "«Запуск на 5 миллионов закрыт. Лабы сданы, накрыта поляна.»", stat: "5,000,000 ₽" },
+  { id: 12, title: "Каноничный кент", badge: "Бро", img: "/producer/assets/vlad_12.jpg", quote: "«Настоящий бро, который поможет поднять Spring Boot в 4 утра.»", stat: "Преданность: ∞" },
+  { id: 13, title: "Сверхкабан на массе", badge: "Тяга", img: "/producer/assets/vlad_13.jpg", quote: "«Масса набрана, лиды залиты, запуск летит в космос.»", stat: "125 кг • Сила" },
+  { id: 14, title: "Инженер-Клаксонщик", badge: "Акустика", img: "/producer/assets/vlad_14.jpg", quote: "«Регулирует частоту клаксона для максимального пробития дедлайнов.»", stat: "180 dB • Частота" },
+  { id: 15, title: "Швабра высокого давления", badge: "Клининг Pro", img: "/producer/assets/vlad_15.jpg", quote: "«Смывает любые технические долги под напором 200 бар.»", stat: "200 Bar • Чистота" },
+  { id: 16, title: "Дрон-Камикадзе", badge: "Штурмовик", img: "/producer/assets/vlad_16.jpg", quote: "«Точечный влёт в Директ эксперта с оффером от которого нельзя отказаться.»", stat: "Скорость 300 км/ч" },
+  { id: 17, title: "Сэр Похмелье в смокинге", badge: "Элита", img: "/producer/assets/vlad_17.jpg", quote: "«Даже в полном нокауте подписывает договоры на миллион с бокалом минералки.»", stat: "Шарм 100 • Стиль" },
+  { id: 18, title: "Кабан-Стратег", badge: "Тактика", img: "/producer/assets/vlad_18.jpg", quote: "«Строит продюсерские воронки с закрытыми глазами.»", stat: "Стратегия 99" },
+  { id: 19, title: "Вафледрон Ночного Видения", badge: "Ночь", img: "/producer/assets/vlad_19.jpg", quote: "«Охраняет прод в 4 утра, пока вся команда спит.»", stat: "Тепловизор • 4K" },
+  { id: 20, title: "Клаксон 180 dB Турбо", badge: "Ультразвук", img: "/producer/assets/vlad_20.jpg", quote: "«Звуковой удар, пробуждающий команду к сдаче спринта.»", stat: "180 dB • Турбо" },
+  { id: 21, title: "Продюсер Сибири", badge: "Легенда", img: "/producer/assets/vlad_21.jpg", quote: "«Собрал зал на 10 000 человек одним сторисом в Telegram.»", stat: "Конверсия 98%" },
+  { id: 22, title: "Повелитель Рассола", badge: "Алхимия", img: "/producer/assets/vlad_22.jpg", quote: "«Секретная формула электролитов, воскрешающая после любого нетворкинга.»", stat: "100% Баланс" },
+  { id: 23, title: "Дрон Глубокого Бурения", badge: "Сейсмо", img: "/producer/assets/vlad_23.jpg", quote: "«Достает скрытые боли аудитории из самых глубин комментариев.»", stat: "Глубина 50м" },
+  { id: 24, title: "Деловой Кабан", badge: "Совет Директоров", img: "/producer/assets/vlad_24.jpg", quote: "«Серьезный разговор на миллион рублей с партнерами.»", stat: "Капитал ∞" },
+  { id: 25, title: "Швабра Антикризисная", badge: "Аварийный", img: "/producer/assets/vlad_25.jpg", quote: "«Быстрое устранение любых факапов на проекте.»", stat: "Скорость x10" },
+  { id: 26, title: "Клаксон Судного Дня", badge: "Апокалипсис", img: "/producer/assets/vlad_26.jpg", quote: "«Когда дедлайн наступил вчера. Звучит на весь мир.»", stat: "200 dB" },
+  { id: 27, title: "Похмелье на Релаксе", badge: "Дзен", img: "/producer/assets/vlad_27.jpg", quote: "«Абсолютное спокойствие после закрытого квартала.»", stat: "Дзен 100%" },
+  { id: 28, title: "Кабан-Тяжеловес", badge: "Титан", img: "/producer/assets/vlad_28.jpg", quote: "«Берет на себя любую нагрузку и не прогибается.»", stat: "Броня 500" },
+  { id: 29, title: "Дрон-Охотник за Трендовой Музыкой", badge: "АудиоРЭБ", img: "/producer/assets/vlad_29.jpg", quote: "«Находит вирусные звуки для рилсов за неделю до того, как они залетят.»", stat: "Тренды 100%" },
+  { id: 30, title: "Сверхзвуковой Вафледрон", badge: "Сверхзвук", img: "/producer/assets/vlad_30.jpg", quote: "«Доставка правок клиенту со скоростью звука.»", stat: "Мах 3.5" },
+  { id: 31, title: "Алкаш-Мыслитель", badge: "Философия", img: "/producer/assets/vlad_31.jpg", quote: "«Вскрывает глубинные инсайты за барной стойкой.»", stat: "Мудрость ∞" },
+  { id: 32, title: "Победитель Дедлайнов", badge: "Чемпион", img: "/producer/assets/vlad_32.jpg", quote: "«Ни один дедлайн не ушёл живым.»", stat: "Побед: 100%" },
+  { id: 33, title: "Легендарный Бро", badge: "Абсолют", img: "/producer/assets/vlad_33.jpg", quote: "«Тот самый лучший кент, на котором держится весь этот мир.»", stat: "Карма 10000" }
 ];
 
 export const EXCUSES: string[] = [

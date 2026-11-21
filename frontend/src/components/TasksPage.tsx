@@ -55,10 +55,10 @@ export const TasksPage: React.FC<TasksPageProps> = ({
   });
 
   const getTaskAvatar = (t: Task): string => {
-    if (t.taskType === 'UNIVERSITY') return '/assets/vlad_2.jpg'; // Швабра
-    if (t.taskType === 'LAUNCH') return '/assets/vlad_1.jpg'; // Кабан
-    if (t.taskPriority === 'HIGH') return '/assets/vlad_6.jpg'; // Клаксон
-    return '/assets/vlad_4.jpg'; // Сэр похмелье
+    if (t.taskType === 'UNIVERSITY') return '/producer/assets/vlad_2.jpg'; // Швабра
+    if (t.taskType === 'LAUNCH') return '/producer/assets/vlad_1.jpg'; // Кабан
+    if (t.taskPriority === 'HIGH') return '/producer/assets/vlad_6.jpg'; // Клаксон
+    return '/producer/assets/vlad_4.jpg'; // Сэр похмелье
   };
 
   const getTypeBadge = (type: TaskType) => {

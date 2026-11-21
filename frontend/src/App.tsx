@@ -134,14 +134,14 @@ export const App: React.FC = () => {
     if (newStatus === 'DONE') {
       triggerBeerToast();
       setReactionToast({
-        img: '/assets/vlad_11.jpg',
+        img: '/producer/assets/vlad_11.jpg',
         title: 'ТРИУМФ КАБАНА!',
         quote: '«Задача закрыта! Накрывай поляну!»'
       });
     } else if (newStatus === 'PROCESSING') {
       triggerBoarRoar();
       setReactionToast({
-        img: '/assets/vlad_1.jpg',
+        img: '/producer/assets/vlad_1.jpg',
         title: 'КАБАН В ЯРОСТИ!',
         quote: '«Задача взята в работу! Жим 300 кг!»'
       });
@@ -221,7 +221,7 @@ export const App: React.FC = () => {
       await Promise.all(promises);
       await fetchTasks();
       setReactionToast({
-        img: '/assets/vlad_10.jpg',
+        img: '/producer/assets/vlad_10.jpg',
         title: 'ЗАДАЧА ОБНОВЛЕНА!',
         quote: '«Все изменения сохранены в системе!»'
       });
@@ -235,7 +235,7 @@ export const App: React.FC = () => {
     playTick();
     setTasks(prev => prev.filter(t => t.id !== taskId));
     setReactionToast({
-      img: '/assets/vlad_8.jpg',
+      img: '/producer/assets/vlad_8.jpg',
       title: 'ШВАБРА ОПЕРАТИВНАЯ!',
       quote: '«Швабра вымела задачу из списка!»'
     });
@@ -269,7 +269,7 @@ export const App: React.FC = () => {
     };
 
     setReactionToast({
-      img: '/assets/vlad_6.jpg',
+      img: '/producer/assets/vlad_6.jpg',
       title: 'НОВАЯ ЗАДАЧА!',
       quote: '«Задача успешно добавлена! Клаксон взведён!»'
     });

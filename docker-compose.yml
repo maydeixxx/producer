@@ -1,0 +1,95 @@
+services:
+  postgres-tasks:
+    image: postgres:16-alpine
+    container_name: postgres-tasks
+    environment:
+      POSTGRES_DB: tasks_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - tasks_data:/var/lib/postgresql/data
+
+  postgres-experts:
+    image: postgres:16-alpine
+    container_name: postgres-experts
+    environment:
+      POSTGRES_DB: experts_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5434:5432"
+    volumes:
+      - experts_data:/var/lib/postgresql/data
+
+  kafka:
+    image: apache/kafka:3.7.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  task-service:
+    build:
+      context: .
+      dockerfile: TaskService/Dockerfile
+    container_name: task-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-tasks:5432/tasks_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      - postgres-tasks
+      - kafka
+
+  scan-service:
+    build:
+      context: .
+      dockerfile: ScanService/Dockerfile
+    container_name: scan-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-experts:5432/experts_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      AI_TOKEN: ${AI_TOKEN}
+      SCRAPER_TOKEN: ${SCRAPER_TOKEN}
+    depends_on:
+      - postgres-experts
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: NotificationService/Dockerfile
+    container_name: notification-service
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      TELEGRAM_BASE_URL: ${TELEGRAM_BASE_URL}
+      BOT_API_KEY: ${BOT_API_KEY}
+    depends_on:
+      - kafka
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:80"
+
+volumes:
+  tasks_data:
+  experts_data:

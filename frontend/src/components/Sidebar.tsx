@@ -94,7 +94,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-sm font-bold text-white tracking-tight">ProducerOS</span>
-                <span className="text-[9px] font-mono text-accent-orange bg-orange-950/40 border border-orange-900/60 px-1 py-0.2 rounded font-semibold">Pro</span>
               </div>
               <div className="text-[10px] text-zinc-300 font-mono">Штаб Кабана</div>
             </div>

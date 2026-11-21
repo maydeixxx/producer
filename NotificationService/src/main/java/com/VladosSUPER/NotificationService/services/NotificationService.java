@@ -86,7 +86,7 @@ public class NotificationService {
         TaskEventModel task = record.value();
 
         Map<String, String> requestBody = Map.of(
-                "chat_id", "1108970251",
+                "chat_id", "959645115",
                 "text", formatTask(id, task.title(), task.description(), task.taskPriority(), task.taskStatus(), task.taskType(), task.deadline(), task.createdAt(), task.lastActivityAt()),
                 "parse_mode", "HTML"
         );
